@@ -1,0 +1,2648 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Febe Legge">
+<meta name="theme-color" content="#FF6B9D">
+<title>Febe Legge</title>
+<link rel="manifest" href="manifest.json">
+<style>
+  :root {
+    --pink: #FF6B9D;
+    --pink-light: #FFD6E8;
+    --pink-dark: #C94070;
+    --yellow: #FFD93D;
+    --yellow-light: #FFF3C0;
+    --green: #6BCB77;
+    --green-light: #D4F1D7;
+    --blue: #4D96FF;
+    --blue-light: #D6E8FF;
+    --purple: #A78BFA;
+    --purple-light: #EDE9FE;
+    --orange: #FF8C42;
+    --bg: #FFF9FB;
+    --card: #FFFFFF;
+    --text: #2D1B33;
+    --text-soft: #7A5C8A;
+    --border: #F0D6E8;
+    --shadow: 0 4px 20px rgba(255,107,157,0.12);
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+
+  /* SCREENS */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* HOME */
+  #home {
+    background: linear-gradient(160deg, #FFF0F7 0%, #F0F4FF 100%);
+    align-items: center;
+    padding: 40px 24px 32px;
+    gap: 0;
+  }
+  .home-header { text-align: center; margin-bottom: 24px; }
+  .home-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 42px;
+    color: var(--pink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .home-sub { font-size: 16px; color: var(--text-soft); font-weight: 600; }
+
+  .stars-bar {
+    background: var(--card);
+    border-radius: 50px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--text);
+  }
+  .star-icon { font-size: 24px; }
+
+  .lang-toggle {
+    display: flex;
+    background: var(--card);
+    border-radius: 50px;
+    padding: 4px;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    gap: 4px;
+  }
+  .lang-btn {
+    padding: 10px 28px;
+    border-radius: 50px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-soft);
+    transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: var(--pink);
+    color: white;
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+  .menu-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .menu-card:active { transform: scale(0.96); }
+  .menu-card .icon { font-size: 36px; }
+  .menu-card .label {
+    font-weight: 800;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .menu-card.reading { border-color: var(--pink-light); }
+  .menu-card.syllables { border-color: var(--yellow-light); }
+  .menu-card.images { border-color: var(--green-light); }
+  .menu-card.visual { border-color: var(--blue-light); }
+  .menu-card.island { border-color: var(--purple-light); }
+  .menu-card.admin { border-color: var(--border); }
+
+  .admin-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-soft);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    padding: 8px;
+  }
+
+  /* LEVEL SELECTOR */
+  .level-bar {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+  .level-btn {
+    flex: 1;
+    padding: 8px 4px;
+    border-radius: 50px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-soft);
+    transition: all 0.2s;
+  }
+  .level-btn.active {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+  }
+
+  /* BACK HEADER */
+  .page-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 8px;
+    gap: 12px;
+  }
+  .back-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .page-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    color: var(--pink);
+  }
+  .page-lang {
+    margin-left: auto;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+    background: var(--pink-light);
+    padding: 4px 12px;
+    border-radius: 50px;
+  }
+
+  /* READING EXERCISE */
+  #reading { background: #FFF8FC; }
+  .mode-toggle {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--card);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-soft);
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .mode-btn.active {
+    background: var(--pink-light);
+    border-color: var(--pink);
+    color: var(--pink-dark);
+  }
+
+  .text-select-area {
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+  .text-select-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+  }
+  select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--card);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237A5C8A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  .reading-card {
+    margin: 0 20px 12px;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px 18px;
+    box-shadow: var(--shadow);
+    height: 340px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .syllable-text {
+    font-family: 'Nunito', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 2.2;
+    text-align: left;
+    letter-spacing: 0.5px;
+  }
+  .syllable {
+    display: inline-block;
+    padding: 3px 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+    position: relative;
+  }
+  .syllable.pending { color: var(--text); }
+  .syllable.active {
+    color: #7A3800;
+    background: var(--yellow);
+    transform: scale(1.12);
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(255,200,0,0.5);
+  }
+  .syllable.done { color: #C0A8CC; }
+  .syllable.error {
+    color: white;
+    background: #E83030;
+    border-radius: 6px;
+  }
+  .syllable.correct-mark { color: var(--green); }
+
+  .speed-row {
+    padding: 0 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .speed-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+    white-space: nowrap;
+  }
+  .speed-btns {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+  }
+  .speed-btn {
+    flex: 1;
+    padding: 8px 2px;
+    border-radius: 50px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    color: var(--text-soft);
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .speed-btn.active {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: white;
+  }
+
+  .word-sep { display: inline-block; width: 10px; }
+
+  #page-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(255,249,251,0.95);
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 40px 24px;
+    text-align: center;
+    border-radius: var(--radius);
+  }
+  #reading-active {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .reading-controls {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-primary {
+    background: var(--pink);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+    box-shadow: 0 4px 16px rgba(255,107,157,0.35);
+  }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-secondary {
+    background: var(--card);
+    color: var(--pink);
+    border: 2px solid var(--pink-light);
+    border-radius: 50px;
+    padding: 14px 32px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+  }
+  .btn-secondary:active { transform: scale(0.97); }
+  .btn-danger-light {
+    background: #FFF0F0;
+    color: #FF4444;
+    border: 2px solid #FFD0D0;
+    border-radius: 50px;
+    padding: 14px 32px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .progress-bar-wrap {
+    padding: 0 20px;
+    margin-bottom: 12px;
+  }
+  .progress-bar-bg {
+    background: var(--pink-light);
+    border-radius: 50px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    background: var(--pink);
+    height: 100%;
+    border-radius: 50px;
+    transition: width 0.3s;
+  }
+
+  /* RESULTS SCREEN */
+  #results {
+    background: linear-gradient(160deg, #FFF0F7 0%, #F0F4FF 100%);
+    align-items: center;
+    padding: 40px 24px;
+    text-align: center;
+    gap: 20px;
+  }
+  .result-emoji { font-size: 72px; }
+  .result-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px;
+    color: var(--pink);
+  }
+  .result-stats {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 320px;
+  }
+  .result-stat {
+    flex: 1;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .result-stat .num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px;
+    color: var(--pink);
+  }
+  .result-stat .lbl {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-soft);
+  }
+  .stars-earned {
+    display: flex;
+    gap: 8px;
+    font-size: 40px;
+    margin: 8px 0;
+  }
+  .stars-earned .star { animation: starPop 0.3s ease both; }
+  .stars-earned .star:nth-child(2) { animation-delay: 0.1s; }
+  .stars-earned .star:nth-child(3) { animation-delay: 0.2s; }
+  @keyframes starPop {
+    0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+    70% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .review-text {
+    font-size: 18px;
+    font-weight: 800;
+    text-align: left;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: var(--shadow);
+    line-height: 2;
+  }
+
+  /* SYLLABLES EXERCISE */
+  #syllables { background: #FFFBF0; }
+  .syllable-exercise {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+  .target-word-display {
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    color: var(--text-soft);
+    text-align: center;
+  }
+  .word-image {
+    font-size: 80px;
+    text-align: center;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  }
+  .syllable-slots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .syl-slot {
+    width: 70px; height: 56px;
+    border-radius: var(--radius-sm);
+    border: 3px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    color: var(--text);
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  .syl-slot.filled {
+    border-style: solid;
+    border-color: var(--yellow);
+    background: var(--yellow-light);
+  }
+  .syl-slot.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+    color: #1a7a25;
+  }
+  .syl-slot.wrong {
+    border-color: #FF4444;
+    background: #FFF0F0;
+    animation: shake 0.4s;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .syllable-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .syl-option {
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    border: 2px solid var(--border);
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .syl-option:active { transform: scale(0.95); }
+  .syl-option.used { opacity: 0.3; pointer-events: none; }
+
+  /* IMAGE MATCH EXERCISE */
+  #imgmatch { background: #F0FFF4; }
+  .img-exercise {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .img-display { font-size: 100px; text-align: center; }
+  .word-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .word-option {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px;
+    text-align: center;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    color: var(--text);
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .word-option:active { transform: scale(0.97); }
+  .word-option.correct-ans {
+    background: var(--green-light);
+    border-color: var(--green);
+    color: #1a7a25;
+    animation: correctBounce 0.4s;
+  }
+  .word-option.wrong-ans {
+    background: #FFF0F0;
+    border-color: #FF4444;
+    color: #CC0000;
+    animation: shake 0.4s;
+  }
+  @keyframes correctBounce {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  /* VISUAL DISCRIMINATION */
+  #visual { background: #F0F4FF; }
+  .visual-exercise {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .target-word-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px 40px;
+    box-shadow: var(--shadow);
+    border: 3px solid var(--blue-light);
+  }
+  .target-word-box .tw {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px;
+    color: var(--blue);
+  }
+  .word-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .word-cell {
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    color: var(--text);
+    transition: all 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .word-cell:active { transform: scale(0.97); }
+  .word-cell.correct-ans { background: var(--green-light); border-color: var(--green); color: #1a7a25; }
+  .word-cell.wrong-ans { background: #FFF0F0; border-color: #FF4444; animation: shake 0.4s; }
+
+  /* ISLAND SCREEN */
+  #island {
+    background: linear-gradient(180deg, #87CEEB 0%, #B0E0FF 35%, #90EE90 35%, #5DBB63 100%);
+    align-items: center;
+    padding: 0;
+  }
+  .island-header {
+    width: 100%;
+    padding: 20px 20px 10px;
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .island-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+  .island-stars {
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .island-svg-wrap {
+    width: 100%;
+    max-width: 400px;
+    padding: 0 16px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .island-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 16px 20px;
+    width: 100%;
+  }
+  .island-piece {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: all 0.3s;
+  }
+  .island-piece.locked {
+    background: rgba(255,255,255,0.25);
+    border: 2px dashed rgba(255,255,255,0.5);
+  }
+  .island-piece.unlocked {
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: appear 0.4s ease;
+  }
+  @keyframes appear {
+    from { transform: scale(0) rotate(-10deg); opacity: 0; }
+    to { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .unlock-btn {
+    background: var(--yellow);
+    color: var(--text);
+    border: none;
+    border-radius: 50px;
+    padding: 14px 28px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 20px 20px;
+    box-shadow: 0 4px 16px rgba(255,217,61,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: calc(100% - 40px);
+    justify-content: center;
+  }
+  .unlock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ADMIN SCREEN */
+  #admin { background: #F8F8FC; }
+  .admin-content {
+    padding: 0 20px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .admin-section {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .admin-section h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .admin-section label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+  }
+  .admin-section input, .admin-section textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--bg);
+    margin-bottom: 12px;
+    resize: vertical;
+  }
+  .admin-section textarea { min-height: 80px; }
+  .admin-list { display: flex; flex-direction: column; gap: 8px; }
+  .admin-list-item {
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .admin-list-item .item-label { flex: 1; font-size: 14px; font-weight: 600; }
+  .admin-list-item .del-btn {
+    background: #FFF0F0;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #FF4444;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .admin-add-btn {
+    background: var(--green-light);
+    color: #1a7a25;
+    border: 2px solid var(--green);
+    border-radius: 50px;
+    padding: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .hint {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: -8px;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 15px;
+    z-index: 100;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* CONFETTI */
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 1.5s ease-in forwards;
+    pointer-events: none;
+    z-index: 200;
+  }
+  @keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(0) rotate(0); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(360deg); }
+  }
+
+  /* EXERCISE SCORE BAR */
+  .score-bar {
+    padding: 8px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .score-badge {
+    background: var(--yellow-light);
+    border: 2px solid var(--yellow);
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-weight: 800;
+    font-size: 14px;
+    color: #996600;
+  }
+
+  /* INSTRUCTIONS CARD */
+  .instructions {
+    margin: 0 20px 16px;
+    background: var(--blue-light);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a3a7a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <div class="home-header">
+    <div class="home-title">🌟 Febe Legge</div>
+    <div class="home-sub" id="home-sub">Ciao Febe! Cosa facciamo oggi?</div>
+  </div>
+
+  <div class="stars-bar">
+    <span class="star-icon">⭐</span>
+    <span id="total-stars">0</span>
+    <span style="font-size:14px;color:var(--text-soft);font-weight:600;" id="home-stars-label">stelle</span>
+  </div>
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btn-it" onclick="setLang('it')">🇮🇹 Italiano</button>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 English</button>
+  </div>
+
+  <div class="menu-grid">
+    <div class="menu-card reading" onclick="showScreen('reading')">
+      <span class="icon">📖</span>
+      <span class="label" id="menu-reading">Leggi ad alta voce</span>
+    </div>
+    <div class="menu-card syllables" onclick="showScreen('syllables')">
+      <span class="icon">🧩</span>
+      <span class="label" id="menu-syllables">Completa le sillabe</span>
+    </div>
+    <div class="menu-card images" onclick="showScreen('imgmatch')">
+      <span class="icon">🎨</span>
+      <span class="label" id="menu-images">Immagine & parola</span>
+    </div>
+    <div class="menu-card visual" onclick="showScreen('visual')">
+      <span class="icon">🔍</span>
+      <span class="label" id="menu-visual">Trova la parola</span>
+    </div>
+    <div class="menu-card island" onclick="showScreen('island')">
+      <span class="icon">🏝️</span>
+      <span class="label" id="menu-island">La mia isola</span>
+    </div>
+    <div class="menu-card" style="border-color:#FFE4D6" onclick="showScreen('letters')">
+      <span class="icon">🔤</span>
+      <span class="label" id="menu-letters">Completa la parola</span>
+    </div>
+    <div class="menu-card admin" onclick="showScreen('admin')" style="grid-column:span 2">
+      <span class="icon">⚙️</span>
+      <span class="label">Impostazioni</span>
+    </div>
+  </div>
+</div>
+
+<!-- READING SCREEN -->
+<div id="reading" class="screen" style="position:relative">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="page-title" id="reading-title">Lettura</span>
+    <span class="page-lang" id="reading-lang-badge">IT</span>
+  </div>
+
+  <!-- Setup area (shown before reading starts) -->
+  <div id="reading-setup">
+    <div class="score-bar">
+      <span class="score-badge" id="reading-score-badge">⭐ 0</span>
+    </div>
+    <div class="level-bar">
+      <button class="level-btn active" onclick="setLevel(0)" id="lvl0">Livello 1</button>
+      <button class="level-btn" onclick="setLevel(1)" id="lvl1">Livello 2</button>
+      <button class="level-btn" onclick="setLevel(2)" id="lvl2">Livello 3</button>
+    </div>
+    <div class="text-select-area">
+      <div class="text-select-label" id="reading-select-label">Scegli un testo:</div>
+      <select id="text-select" onchange="loadText()"></select>
+    </div>
+    <div class="speed-row">
+      <span class="speed-label">🐢 Velocità:</span>
+      <div class="speed-btns">
+        <button class="speed-btn" onclick="setSpeed(0)" id="spd0">Lenta</button>
+        <button class="speed-btn active" onclick="setSpeed(1)" id="spd1">Media</button>
+        <button class="speed-btn" onclick="setSpeed(2)" id="spd2">Veloce</button>
+        <button class="speed-btn" onclick="setSpeed(3)" id="spd3">Turbo</button>
+      </div>
+    </div>
+    <div class="reading-controls" style="padding-bottom:16px">
+      <button class="btn-primary" id="reading-start-btn" onclick="startReading()">▶ Inizia</button>
+      <button class="btn-secondary" onclick="goHome()" id="reading-back-label">← Torna al menu</button>
+    </div>
+  </div>
+
+  <!-- Active reading area (shown during reading) -->
+  <div id="reading-active" style="display:none;flex-direction:column;flex:1;padding-bottom:12px">
+    <!-- Page counter + progress -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 20px 4px">
+      <span id="page-counter" style="font-size:13px;font-weight:700;color:var(--text-soft)">Pagina 1 / 1</span>
+      <span class="score-badge" id="reading-score-active">⭐ 0</span>
+    </div>
+    <div class="progress-bar-wrap" style="margin-bottom:8px">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="reading-progress" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- The page text -->
+    <div class="reading-card" id="reading-card" style="flex:1;height:auto;min-height:280px;max-height:380px">
+      <div class="syllable-text" id="reading-text-display"></div>
+    </div>
+
+    <!-- Dim overlay for page transition -->
+    <div id="page-overlay" style="display:none;position:absolute;inset:0;background:rgba(255,249,251,0.92);z-index:10;align-items:center;justify-content:center;flex-direction:column;gap:16px">
+      <div style="font-size:48px" id="overlay-emoji">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:var(--pink)" id="overlay-msg">Brava!</div>
+      <button class="btn-primary" style="max-width:260px" onclick="goNextPage()" id="overlay-next-btn">Pagina successiva →</button>
+    </div>
+
+    <!-- Controls row -->
+    <div style="padding:10px 20px;display:flex;gap:10px">
+      <button class="btn-danger-light" id="reading-error-btn" onclick="markError()" style="flex:1">❌ Errore</button>
+      <button id="reading-pause-btn" onclick="togglePause()" style="flex:0 0 56px;height:52px;border-radius:50%;border:2px solid var(--border);background:var(--card);font-size:22px;cursor:pointer">⏸</button>
+      <button class="btn-secondary" id="reading-finish-btn" onclick="finishReading()" style="flex:1">✅ Fine</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="results" class="screen">
+  <div class="result-emoji" id="result-emoji">🌟</div>
+  <div class="result-title" id="result-title">Bravissima Febe!</div>
+  <div class="stars-earned" id="stars-earned"></div>
+  <div class="result-stats">
+    <div class="result-stat">
+      <div class="num" id="res-words">0</div>
+      <div class="lbl" id="res-words-lbl">parole</div>
+    </div>
+    <div class="result-stat">
+      <div class="num" id="res-errors">0</div>
+      <div class="lbl" id="res-errors-lbl">errori</div>
+    </div>
+    <div class="result-stat">
+      <div class="num" id="res-stars">0</div>
+      <div class="lbl">⭐</div>
+    </div>
+  </div>
+  <div class="review-text" id="review-text"></div>
+  <button class="btn-primary" onclick="showScreen('reading')" id="results-again-btn" style="max-width:320px;width:100%">
+    🔄 Leggi ancora
+  </button>
+  <button class="btn-secondary" onclick="goHome()" id="results-home-btn" style="max-width:320px;width:100%">
+    🏠 Menu
+  </button>
+</div>
+
+<!-- SYLLABLES SCREEN -->
+<div id="syllables" class="screen">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="page-title" id="syllables-title">Sillabe</span>
+    <span class="page-lang" id="syllables-lang-badge">IT</span>
+  </div>
+  <div class="score-bar">
+    <span class="score-badge" id="syl-score">⭐ 0</span>
+    <span style="font-size:13px;font-weight:700;color:var(--text-soft)" id="syl-progress-label">0/0</span>
+  </div>
+  <div class="level-bar">
+    <button class="level-btn active" onclick="setLevel(0)" id="slvl0">Livello 1</button>
+    <button class="level-btn" onclick="setLevel(1)" id="slvl1">Livello 2</button>
+    <button class="level-btn" onclick="setLevel(2)" id="slvl2">Livello 3</button>
+  </div>
+  <div class="instructions" id="syl-instructions">
+    🧩 Tocca le sillabe nell'ordine giusto per completare la parola!
+  </div>
+  <div class="syllable-exercise">
+    <div class="word-image" id="syl-image">🌸</div>
+    <div class="target-word-display" id="syl-hint"></div>
+    <div class="syllable-slots" id="syl-slots"></div>
+    <div class="syllable-options" id="syl-options"></div>
+  </div>
+  <div style="padding:16px 20px 8px">
+    <button class="btn-primary" id="syl-next-btn" onclick="nextSylWord()" style="display:none" id="syl-next-label">
+      Avanti ➡
+    </button>
+  </div>
+</div>
+
+<!-- IMAGE MATCH SCREEN -->
+<div id="imgmatch" class="screen">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="page-title" id="img-title">Immagine</span>
+    <span class="page-lang" id="img-lang-badge">IT</span>
+  </div>
+  <div class="score-bar">
+    <span class="score-badge" id="img-score">⭐ 0</span>
+    <span style="font-size:13px;font-weight:700;color:var(--text-soft)" id="img-progress-label">0/0</span>
+  </div>
+  <div class="level-bar">
+    <button class="level-btn active" onclick="setLevel(0)" id="ilvl0">Livello 1</button>
+    <button class="level-btn" onclick="setLevel(1)" id="ilvl1">Livello 2</button>
+    <button class="level-btn" onclick="setLevel(2)" id="ilvl2">Livello 3</button>
+  </div>
+  <div class="instructions" id="img-instructions">
+    🎨 Tocca la parola giusta per l'immagine!
+  </div>
+  <div class="img-exercise">
+    <div class="img-display" id="img-emoji">🌸</div>
+    <div class="word-options" id="img-options"></div>
+  </div>
+</div>
+
+<!-- VISUAL DISCRIMINATION SCREEN -->
+<div id="visual" class="screen">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="page-title" id="vis-title">Trova la parola</span>
+    <span class="page-lang" id="vis-lang-badge">IT</span>
+  </div>
+  <div class="score-bar">
+    <span class="score-badge" id="vis-score">⭐ 0</span>
+    <span style="font-size:13px;font-weight:700;color:var(--text-soft)" id="vis-progress-label">0/0</span>
+  </div>
+  <div class="level-bar">
+    <button class="level-btn active" onclick="setLevel(0)" id="vlvl0">Livello 1</button>
+    <button class="level-btn" onclick="setLevel(1)" id="vlvl1">Livello 2</button>
+    <button class="level-btn" onclick="setLevel(2)" id="vlvl2">Livello 3</button>
+  </div>
+  <div class="instructions" id="vis-instructions">
+    🔍 Trova le parole uguali a quella evidenziata!
+  </div>
+  <div class="visual-exercise">
+    <div class="target-word-box">
+      <div class="tw" id="vis-target">SOLE</div>
+    </div>
+    <div class="word-grid" id="vis-grid"></div>
+    <div style="height:16px"></div>
+    <button class="btn-primary" id="vis-next-btn" onclick="nextVisWord()" style="display:none;max-width:320px;width:100%">
+      Avanti ➡
+    </button>
+  </div>
+</div>
+
+<!-- ISLAND SCREEN -->
+<div id="island" class="screen">
+  <div class="island-header">
+    <div class="island-title">🏝️ L'isola di Febe</div>
+    <div class="island-stars">⭐ <span id="island-stars">0</span> stelle</div>
+  </div>
+  <div class="island-grid" id="island-grid"></div>
+  <button class="unlock-btn" id="unlock-btn" onclick="unlockPiece()">
+    ⭐ Sblocca (10 stelle)
+  </button>
+  <button class="btn-secondary" onclick="goHome()" style="margin:0 20px 24px;width:calc(100% - 40px)">
+    🏠 Menu
+  </button>
+</div>
+
+<!-- LETTER EXERCISE SCREEN -->
+<div id="letters" class="screen" style="background:#FFF5F0">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="page-title" style="color:#FF6B4A" id="letters-title">Completa la parola</span>
+    <span class="page-lang" id="letters-lang-badge">IT</span>
+  </div>
+  <div class="score-bar">
+    <span class="score-badge" id="let-score">⭐ 0</span>
+    <span style="font-size:13px;font-weight:700;color:var(--text-soft)" id="let-progress">0/0</span>
+  </div>
+  <div class="level-bar">
+    <button class="level-btn active" onclick="setLevel(0)" id="llvl0">Livello 1</button>
+    <button class="level-btn" onclick="setLevel(1)" id="llvl1">Livello 2</button>
+    <button class="level-btn" onclick="setLevel(2)" id="llvl2">Livello 3</button>
+  </div>
+  <div class="instructions" style="background:#FFE8E0;color:#7A2000" id="letters-instructions">
+    🔤 Scegli la lettera giusta per completare la parola!
+  </div>
+  <div style="padding:0 20px;display:flex;flex-direction:column;gap:20px;align-items:center">
+    <div style="font-size:80px;text-align:center" id="let-emoji">🎲</div>
+    <!-- Word display with blank -->
+    <div id="let-word-display" style="display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap"></div>
+    <!-- Hint line -->
+    <div id="let-hint" style="font-family:'Fredoka One',cursive;font-size:20px;color:var(--text-soft);min-height:28px;text-align:center"></div>
+    <!-- Letter options -->
+    <div id="let-options" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"></div>
+    <!-- Next button -->
+    <button class="btn-primary" id="let-next-btn" onclick="nextLetterWord()" style="display:none;max-width:280px;width:100%;background:#FF6B4A;box-shadow:0 4px 16px rgba(255,107,74,0.35)">
+      Avanti ➡
+    </button>
+  </div>
+</div>
+
+<!-- ADMIN SCREEN -->
+<div id="admin" class="screen">
+  <div class="page-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="page-title">Impostazioni</span>
+  </div>
+  <div class="admin-content">
+
+    <div class="admin-section">
+      <h3>⭐ Stelle di Febe</h3>
+      <label>Stelle totali</label>
+      <input type="number" id="admin-stars-input" min="0" value="0">
+      <button class="admin-add-btn" onclick="saveAdminStars()">Salva stelle</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>📖 Aggiungi testo di lettura</h3>
+      <label id="admin-lang-label">Lingua</label>
+      <select id="admin-lang" style="margin-bottom:12px">
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+      <label>Livello</label>
+      <select id="admin-level" style="margin-bottom:12px">
+        <option value="0">Livello 1 (6-7 anni)</option>
+        <option value="1">Livello 2 (7-8 anni)</option>
+        <option value="2">Livello 3 (8-10 anni)</option>
+      </select>
+      <label>Titolo del testo</label>
+      <input type="text" id="admin-text-title" placeholder="es. Il gatto e il topo">
+      <label>Testo (scrivi le parole separate da spazi, le sillabe separate da ·)</label>
+      <div class="hint">es: MA·MA la gat·ta man·gia il for·mag·gio</div>
+      <textarea id="admin-text-body" placeholder="MA·MA la gat·ta man·gia..."></textarea>
+      <button class="admin-add-btn" onclick="addText()">+ Aggiungi testo</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>📖 Testi salvati</h3>
+      <div class="admin-list" id="admin-texts-list"></div>
+    </div>
+
+    <div class="admin-section">
+      <h3>🧩 Aggiungi parola (sillabe)</h3>
+      <select id="admin-syl-lang" style="margin-bottom:12px">
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+      <select id="admin-syl-level" style="margin-bottom:12px">
+        <option value="0">Livello 1</option>
+        <option value="1">Livello 2</option>
+        <option value="2">Livello 3</option>
+      </select>
+      <label>Parola con sillabe (usa ·)</label>
+      <input type="text" id="admin-syl-word" placeholder="es: SO·LE">
+      <label>Emoji/immagine</label>
+      <input type="text" id="admin-syl-emoji" placeholder="es: ☀️">
+      <button class="admin-add-btn" onclick="addSylWord()">+ Aggiungi parola</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>🎨 Aggiungi parola (immagine)</h3>
+      <select id="admin-img-lang" style="margin-bottom:12px">
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+      <select id="admin-img-level" style="margin-bottom:12px">
+        <option value="0">Livello 1</option>
+        <option value="1">Livello 2</option>
+        <option value="2">Livello 3</option>
+      </select>
+      <label>Parola</label>
+      <input type="text" id="admin-img-word" placeholder="es: SOLE">
+      <label>Emoji</label>
+      <input type="text" id="admin-img-emoji" placeholder="☀️">
+      <button class="admin-add-btn" onclick="addImgWord()">+ Aggiungi parola</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>🔍 Aggiungi parola (trova uguale)</h3>
+      <select id="admin-vis-lang" style="margin-bottom:12px">
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+      <select id="admin-vis-level" style="margin-bottom:12px">
+        <option value="0">Livello 1</option>
+        <option value="1">Livello 2</option>
+        <option value="2">Livello 3</option>
+      </select>
+      <label>Parola corretta</label>
+      <input type="text" id="admin-vis-word" placeholder="es: SOLE">
+      <label>Distrattori (separati da virgola)</label>
+      <input type="text" id="admin-vis-distractors" placeholder="es: SALE,SOLE,SUOLE,COLE">
+      <button class="admin-add-btn" onclick="addVisWord()">+ Aggiungi parola</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>⚠️ Reset dati</h3>
+      <button onclick="resetAll()" style="background:#FFF0F0;color:#CC0000;border:2px solid #FFB0B0;border-radius:50px;padding:12px;font-family:Nunito,sans-serif;font-weight:800;font-size:14px;cursor:pointer;width:100%">
+        🗑️ Cancella tutti i progressi
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ DATA DEFAULTS ============
+const DEFAULT_DATA = {
+  it: {
+    texts: [
+      // ── LIVELLO 1 ──────────────────────────────────────────────────────
+      { id: 'pp1', title: 'Il piccolo principe – il serpente boa (cap. I)', level: 0, body: 'Quan·do a·ve·vo sei an·ni, vi·di u·na vol·ta u·na me·ra·vi·glio·sa il·lu·stra·zio·ne in un li·bro sul·la Fo·re·sta Ver·gi·ne che a·ve·va per ti·to·lo Sto·rie vis·su·te. Rap·pre·sen·ta·va un ser·pen·te boa che in·go·ia·va u·na fie·ra. Nel li·bro c'e·ra scrit·to: I ser·pen·ti boa in·go·ia·no le pre·de tut·te in·te·re, sen·za ma·sti·car·le. Do·po non rie·sco·no più a muo·ver·si e se la dor·mo·no per i sei me·si che im·pie·ga·no a di·ge·ri·re. Al·lo·ra ho ri·fles·su·to mol·to sul·le co·se av·ven·tu·ro·se che pos·so·no ca·pi·ta·re nel·la giun·gla e so·no riu·sci·to an·ch'io a pro·dur·re, con u·na ma·ti·ta co·lo·ra·ta, il mio pri·mo di·se·gno. Mo·strai il mio ca·po·la·vo·ro a·gli a·dul·ti e do·man·dai se il mio di·se·gno gli met·te·va pau·ra. Mi ri·spo·se·ro: Per·ché mai un cap·pel·lo do·vreb·be far pau·ra? Il mio di·se·gno non rap·pre·sen·ta·va un cap·pel·lo. Rap·pre·sen·ta·va un ser·pen·te boa che di·ge·ri·va un e·le·fan·te. Al·lo·ra ho di·se·gna·to quel·lo che c'e·ra den·tro il ser·pen·te boa, co·sì che i gran·di po·tes·se·ro com·pren·de·re. Gli de·vi sem·pre spie·ga·re tut·te le co·se. I gran·di mi sug·ge·ri·ro·no di met·te·re da par·te i di·se·gni dei ser·pen·ti boa e di in·te·res·sar·mi in·ve·ce al·la ge·o·gra·fi·a, al·la sto·ri·a, al·la ma·te·ma·ti·ca e al·la gram·ma·ti·ca. È co·sì che, al·l'e·tà di so·li sei an·ni, ho ab·ban·do·na·to u·na me·ra·vi·glio·sa car·rie·ra da pit·to·re.' },
+      { id: 'pp2', title: 'Il piccolo principe – nel deserto (cap. II)', level: 0, body: 'Sei an·ni fa e·ra·va·ti un ae·ro·pla·no nel de·ser·to del Sa·ha·ra. Qual·co·sa si e·ra rot·to nel mo·to·re. Poi·ché non a·ve·vo con me né mec·ca·ni·co né pas·seg·ge·ri, mi ac·cin·si da so·lo a ri·pa·ra·zio·ni dif·fi·ci·li. E·ra per me u·na que·stio·ne di vi·ta o di mor·te: a·ve·vo a ma·la pe·na da be·re per u·na set·ti·ma·na. La pri·ma not·te mi ad·dor·men·tai sul·la sab·bia a mil·le mi·glia da qual·sia·si ter·ri·to·rio a·bi·ta·to. E·ro più i·so·la·to di un nau·fra·go su u·na za·tte·ra in mez·zo al·l'o·ce·a·no. Poi·ché fu·ro·no sur·pres·o di sen·ti·re u·na vo·ce strana al·l'al·ba: Di·se·gna·mi u·na pe·co·ra! Ba·lzai in pie·di co·me se fos·si sta·to col·pi·to da un ful·mi·ne. Mi stro·pic·ciai gli oc·chi. Os·ser·vai con cu·ra. E vi·di un o·met·to piut·to·sto fuo·ri del co·mu·ne che mi scru·ta·va at·ten·ta·men·te. Ec·co il ri·trat·to mi·glio·re che riu·scii a fa·re di lui. Ma il mio di·se·gno è cer·ta·men·te mol·to me·no gra·zio·so del·l'o·ri·gi·na·le. Non è col·pa mia. A sei an·ni i gran·di mi a·ve·va·no sco·rag·gia·to dal di·se·gna·re e non ho più im·pa·ra·to a di·se·gna·re nien·te, a par·te i boa a·per·ti o chiu·si.' },
+      { id: 't1', title: 'La volpe e il corvo', level: 0, body: 'U·na vol·pe fur·ba cam·mi·na·va nel bo·sco. A·ve·va i pe·li ros·si e la co·da lun·ga e mor·bi·da. Tut·ti gli a·ni·ma·li del bo·sco la co·no·sce·va·no per·ché e·ra fa·mo·sa per i suoi tran·nel·li. Un gior·no vi·de un cor·vo ne·ro po·sa·to su un al·be·ro al·to. Il cor·vo a·ve·va nel bec·co un pez·zo di for·mag·gio gial·lo e pro·fu·ma·to. La vol·pe fe·ce un gran so·ri·so e dis·se: Ca·ro cor·vo, che bel·le piu·me lu·ci·de hai! Sei pro·prio il più bel·lo de·gli uc·cel·li del bo·sco! Il cor·vo si gon·fiò di or·go·glio. La vol·pe con·ti·nuò: Ma di·mi, con u·na vo·ce co·sì bel·la sa·pre·sti an·che can·ta·re per me? Il cor·vo a·prì il bec·co per can·ta·re e il for·mag·gio ca·dde a ter·ra. La vol·pe lo af·fer·rò di cor·sa e scap·pò ri·den·do nel bo·sco. Il cor·vo re·stò sul ra·mo, ver·go·gno·so e sen·za for·mag·gio. Da quel gior·no im·pa·rò a non fi·dar·si trop·po de·gli e·lo·gi.' },
+      { id: 't2', title: 'La pioggia di primavera', level: 0, body: 'Sta·ma·ne il cie·lo so·pra il pae·se è gri·gio e pe·san·te. Le nu·vo·le scu·re ar·ri·va·no dal·le mon·ta·gne e por·ta·no con sé l'o·do·re fre·sco del·la piog·gia. Le pri·me goc·ce ca·do·no len·te sul·le fo·glie de·gli al·be·ri e sul sel·cia·to del·la piaz·za. Ben pre·sto la piog·gia di·ven·ta più for·te e bat·te sul·le fi·ne·stre del·le ca·se. Mar·co cor·re a pren·de·re gli sti·va·li di gom·ma ros·sa che la non·na gli ha re·ga·la·to per Na·ta·le. Con un gran sal·to u·sci·rà a poz·ze e ne u·sci·rà tut·to ba·gna·to. Sua so·rel·la Ma·ia pre·fe·ri·sce re·sta·re den·tro con u·na ta·za di ca·cao cal·do tra le ma·ni. La mam·ma ac·cen·de la ra·dio e dal·la fi·ne·stra guar·da i bam·bi·ni gio·ca·re sot·to la piog·gia. Il gat·to si è ac·coc·co·la·to sul di·va·no e fa ron·ron·sa·re pie·no di son·no. Quan·do la piog·gia fi·ni·sce u·sci·rà il so·le e tut·to bril·le·rà co·me ap·pe·na la·va·to.' },
+      { id: 't3', title: 'Il castello sul mare', level: 0, body: 'Sul·la scog·lie·ra che si af·fac·cia sul ma·re gri·gio c'è un vec·chio ca·stel·lo di pie·tra. Le sue mu·ra spes·se so·no ro·se dal ven·to e dal·la sal·se·di·ne. Le tor·ri qua·dra·te sal·go·no ver·so il cie·lo co·me di·ta gi·gan·ti. Den·tro le mu·ra cre·sco·no e·de·ra sel·va·ti·ca e cio·cchi di fi·co che sbu·ca·no tra i sas·si. Di gior·no i gab·bia·ni si po·sa·no sui me·ro·ni e gri·da·no al ven·to. Di not·te tan·ti pi·pi·strel·li u·sci·ran·no dal·le tor·ri per cac·cia·re nel·l'o·scu·ri·tà. I bam·bi·ni del pae·se rac·con·ta·no che nel ca·stel·lo vi·ve un fan·ta·sma col man·tel·lo bian·co. Di·co·no che di not·te si sen·to·no vo·ci ve·ni·re dal·le tor·ri. Ma nes·su·no ci è mai en·tra·to per sco·pri·re se è ve·ro. For·se quel·le vo·ci so·no sol·tan·to il ven·to che pas·sa tra le pie·tre.' },
+      // ── LIVELLO 2 ──────────────────────────────────────────────────────
+      { id: 'pp3', title: 'Il piccolo principe – la rosa (cap. VIII)', level: 1, body: 'Im·pa·rai ben pre·sto a co·no·sce·re me·glio quel fiore. Sul pia·ne·ta del pic·co·lo prin·ci·pe era·no sem·pre e·si·sti·ti dei fio·ri mol·to sem·pli·ci, or·na·ti di u·no so·lo stra·to di pe·ta·li, che non oc·cu·pa·va·no po·sto e non da·va·no fa·sti·dio a nes·su·no. Com·pa·ri·va·no la mat·ti·na nel·l'er·ba e si spe·gne·va·no la se·ra. Ma que·sto era sbu·ca·to un gior·no da un se·me ve·nu·to non si sa da do·ve, e il pic·co·lo prin·ci·pe a·ve·va sor·ve·glia·to da vi·ci·no quel ra·mi·cel·lo che non so·mi·glia·va agli al·tri. A·vreb·be po·tu·to es·se·re u·na nuo·va spe·cie di ba·o·bab. Ma il cespuglio smes·se pre·sto di cre·sce·re e co·min·ciò a pre·pa·ra·re un fio·re. Il pic·co·lo prin·ci·pe, che as·si·ste·va al·la for·ma·zio·ne di un boc·cio·lo gi·gan·te·sco, sen·ti·va che ne sa·reb·be u·sci·ta u·na ap·pa·ri·zio·ne mi·ra·co·lo·sa, ma il fiore non fi·ni·va di pre·pa·rar·si ad es·se·re bel·lo al ri·pa·ro dei suoi pe·ta·li ver·di. Sceg·lie·va con cu·ra i suoi co·lo·ri. Si ve·sti·va len·ta·men·te, si si·stem·a·va i pe·ta·li u·no a u·no. Non vo·le·va u·sci·re spre·gu·di·ca·ta co·me i pa·pa·ve·ri. Non vo·le·va com·pa·ri·re che nel·la pie·nez·za del·la sua bel·lez·za. Ma quel fiore era piut·to·sto co·quet·to. La sua mi·ste·rio·sa toi·let·te era du·ra·ta gior·ni e gior·ni. Ed ec·co che u·na mat·ti·na, pro·prio al·l'o·ra del sole, si e·ra mo·stra·ta.' },
+      { id: 't4', title: 'Il mercato del sabato', level: 1, body: 'O·gni sa·ba·to mat·ti·na, quan·do il so·le è an·co·ra bas·so, la piaz·za del pae·se si tra·sfor·ma in un mer·ca·to col·le·ri·co. I con·ta·di·ni ar·ri·va·no con i lo·ro fur·go·ni car·chi di ver·du·re fre·sche, frut·ta ma·tu·ra e for·mag·gi pro·fu·ma·ti. C'è Giu·sep·pe che ven·de i po·mo·do·ri ros·si co·me il fuo·co, e la si·gno·ra A·gne·se che por·ta le me·le·ran·ce diret·te dai suoi al·be·ri. La non·na com·pra sem·pre le pa·ta·te per il mi·ne·stro·ne del·la do·me·ni·ca e le me·le per la cro·sta·ta. Il ven·di·to·re di spezie ha sul ta·vo·lo ba·rat·to·li co·lo·ra·ti pie·ni di can·nel·la, pe·pe·ron·ci·no e cu·cu·ma. L'o·do·re mi·sto di frut·ta, di for·mag·gio e di spezie si spar·ge in tut·ta la piaz·za. I bam·bi·ni cor·ro·no tra le ban·ca·rel·le e si fer·ma·no a guar·da·re i dol·ci e·spo·sti sot·to la te·ta·ia di ve·tro. Il mer·ca·to fi·ni·sce sem·pre trop·po pre·sto, ma pro·met·te già di tor·na·re sa·ba·to pros·si·mo.' },
+      { id: 't5', title: 'Il viaggio in treno', level: 1, body: 'Sa·ra e il fra·tel·lo Pie·tro sa·li·ro·no sul tre·no al·l'al·ba di u·na ma·ti·na di lu·glio per an·da·re a tro·va·re i non·ni in cam·pa·gna. Il tre·no cor·re·va ve·lo·ce tra i cam·pi ver·di e i col·li do·ra·ti dal so·le. Dal fi·ne·stri·no i due bam·bi·ni ve·de·va·no sfi·la·re mu·li·ni a ven·to, man·drie di mu·cche e pic·co·li ca·sa·la·ri di pie·tra ros·sa·tra. Pie·tro te·ne·va sul gi·noc·chio un li·bro sui dra·ghi, ma non riu·sci·va a leg·ge·re per·ché guar·da·va con·ti·nua·men·te fuo·ri. Sa·ra in·ve·ce fa·ce·va fo·to con il te·le·fi·no di mam·ma. A me·tà via·ggio il con·dut·to·re rac·con·tò ai bam·bi·ni che quel tre·no pas·sa·va per lo stes·so bi·na·rio da più di cen·t'an·ni. Quan·do ar·ri·va·ro·no al·la sta·zio·net·ta del pae·se dei non·ni, il non·no li a·spet·ta·va sul mar·cia·pie·de con la sua vec·chia bi·ci·clet·ta blu e un pa·nier·no col·mo di ci·lie·ge ros·se.' },
+      { id: 't6', title: 'La biblioteca magica', level: 1, body: 'Nel·la bi·blio·te·ca del quar·tie·re c'è u·na stan·za che po·chi co·no·sco·no. Si tro·va die·tro l'ul·ti·mo scaf·fa·le, quel·lo pie·no di at·lan·ti e di di·zio·na·ri pol·ve·ro·si. Per ar·ri·var·ci bi·so·gna spin·ge·re un vec·chio li·bro ri·le·ga·to in pelle ros·sa: si a·pre al·lo·ra u·na por·ta di le·gno scol·pi·to con fo·glie e a·ni·ma·li. Den·tro la stan·za se·gre·ta gli scaf·fa·li ar·ri·va·no fi·no al sof·fit·to e so·no col·mi di li·bri di tut·ti i co·lo·ri. Ma quel·li non so·no li·bri co·mu·ni: le lo·ro pa·gi·ne si sfog·lia·no da so·le e le pa·ro·le bril·la·no di lu·ce do·ra·ta quan·do il let·to·re si av·vi·ci·na. Chi leg·ge u·na sto·ria in quel·la stan·za la ri·cor·de·rà per sem·pre. La bi·blio·te·ca·ria Si·gno·ra Ro·si ha det·to che la stan·za e·si·ste dal 1742 e che il pri·mo li·bro ad es·ser·vi por·ta·to era u·na rac·col·ta di fa·vo·le scrit·ta a ma·no da u·na bam·bi·na di no·me I·sa·bel·la.' },
+      // ── LIVELLO 3 ──────────────────────────────────────────────────────
+      { id: 'pp4', title: 'Il piccolo principe – l'addomesticamento (cap. XXI)', level: 2, body: 'È al·lo·ra che ap·par·ve la vol·pe. Buo·n·gior·no, dis·se la vol·pe. Buo·n·gior·no, ri·spo·se gen·til·men·te il pic·co·lo prin·ci·pe, che si vol·tò ma non vi·de nes·su·no. Sono qui, sot·to il me·lo, dis·se la vo·ce. Chi sei tu? dis·se il pic·co·lo prin·ci·pe. Sei mol·to gra·zio·sa. So·no u·na vol·pe, dis·se la vol·pe. Vie·ni a gio·ca·re con me, le pro·po·se il pic·co·lo prin·ci·pe. So·no tan·to tri·ste. Non pos·so gio·ca·re con te, dis·se la vol·pe. Non so·no an·co·ra ad·do·me·sti·ca·ta. Ah! scu·sa, dis·se il pic·co·lo prin·ci·pe. Ma, do·po u·na ri·fles·sio·ne, ag·giun·se: Che co·sa vuol di·re ad·do·me·sti·ca·re? Gli uo·mi·ni han·no di·men·ti·ca·to que·sta ve·ri·tà, dis·se la vol·pe. Ma tu non de·vi di·men·ti·car·la. Di·ven·ti re·spon·sa·bi·le per sem·pre di quel·lo che hai ad·do·me·sti·ca·to. Sei re·spon·sa·bi·le del·la tua ro·sa. So·no re·spon·sa·bi·le del·la mia ro·sa, ri·pe·té il pic·co·lo prin·ci·pe, per ri·cor·dar·se·lo be·ne. So·no re·spon·sa·bi·le del·la mia ro·sa. Non si ve·de be·ne che col cuo·re. L'es·sen·zia·le è in·vi·si·bi·le a·gli oc·chi. L'es·sen·zia·le è in·vi·si·bi·le a·gli oc·chi, ri·pe·té il pic·co·lo prin·ci·pe per ri·cor·dar·se·lo.' },
+      { id: 't7', title: 'L'esploratrice del sottosuolo', level: 2, body: 'La geo·lo·ga Mar·ti·na Cal·vi in·dos·sa·va il ca·sco o·gni mat·ti·na pri·ma di ca·la·re nel·le gal·le·rie sot·ter·ra·nee che a·ve·va sco·per·to du·ran·te u·na ri·cer·ca nel·le mon·ta·gne del Tren·ti·no. In quei tun·nel na·tu·ra·li la·vo·ra·va con la lam·pa·da fron·ta·le e gli stru·men·ti di mi·su·ra, pren·den·do no·te su un qua·der·no im·per·mea·bi·le. A·ve·va sco·per·to cri·stal·li di quar·zo ro·sa lun·ghi qua·si tren·ta cen·ti·me·tri, for·ma·zio·ni cal·ca·ree mil·le·na·rie a for·ma di co·lon·ne e pic·co·li la·ghet·ti sot·ter·ra·nei dal·l'ac·qua cri·stal·li·na. O·gni stra·to di roc·cia rac·con·ta·va la sto·ria di u·n'e·po·ca di·ver·sa: dal·le roc·ce vul·ca·ni·che più an·ti·che, che ri·sa·li·va·no a qua·ran·ta mi·lio·ni di an·ni fa, fi·no ai se·di·men·ti re·cen·ti for·ma·ti da cal·ci·te de·po·si·ta·ta dal·l'ac·qua. Mar·ti·na scri·ve·va ar·ti·co·li scien·ti·fi·ci let·ti da ge·o·lo·gi di tut·to il mon·do. Ma la co·sa che a·ma·va di più era tor·na·re a ca·sa e rac·con·ta·re quel·le sto·rie di pie·tra ai fi·gli pri·ma di ce·na, con le ma·ni an·co·ra spor·che di ar·gil·la.' },
+      { id: 't8', title: 'Il laboratorio delle invenzioni', level: 2, body: 'Nel sot·to·tet·to del·la scuo·la me·dia di via Ro·set·ti, il pro·fes·so·re Di·gio·van·ni a·ve·va al·le·sti·to nel cor·so de·gli an·ni un la·bo·ra·to·rio stra·or·di·na·rio che nes·su·no del con·si·glio di i·sti·tu·to a·ve·va mai vi·si·ta·to uf·fi·cial·men·te. Su·gli scaf·fa·li me·tal·li·ci si ac·cu·mu·la·va·no mi·cro·sco·pi u·sa·ti, ci·lin·dri gra·dua·ti, fi·le di bat·te·rie ri·ca·ri·ca·bi·li e ro·tai·e di me·tal·lo lu·ci·do. Gli stu·den·ti più cu·rio·si si fer·ma·va·no vo·lon·ta·ria·men·te do·po le le·zio·ni per co·strui·re ro·bo·ti·ni, ge·ne·ra·to·ri di cor·ren·te e pic·co·li te·le·sco·pi ar·ti·gia·na·li. In quel·l'an·no la clas·se ter·za B de·ci·se di par·te·ci·pa·re al con·cor·so na·zio·na·le per gio·va·ni in·ven·to·ri. La·vo·ra·ro·no per cin·que me·si pro·get·tan·do un di·spo·si·ti·vo che con·ver·ti·va la lu·ce so·la·re in e·ner·gia per ac·cen·de·re le lam·pa·de del·la bi·blio·te·ca. Vin·se·ro il pri·mo pre·mio e il pro·fes·so·re li ab·brac·ciò sul pal·co sen·za dir·nul·la, con gli oc·chi lu·ci·di.' },
+      // ── Pinocchio (Collodi, dominio pubblico) ──────────────────────────
+      { id: 'pi1', title: 'Pinocchio – il burattino (cap. I)', level: 0, body: 'C'e·ra u·na vol·ta... Un re! di·ran·no su·bi·to i miei pic·co·li let·to·ri. No, ra·gaz·zi, a·ve·te sba·glia·to. C'e·ra u·na vol·ta un pez·zo di le·gno. Non e·ra un le·gno di lu·so, ma un sem·pli·ce pe·zzo da ca·ti·na, di quel·li che d'in·ver·no si met·to·no nel·le stu·fe e nei ca·mi·ni per ac·cen·de·re il fuo·co e ri·scal·da·re le stan·ze. Non so co·me an·das·se, ma il fat·to è che un bel gior·no que·sto pez·zo di le·gno ca·pi·tò nel·la bot·te·ga di un vec·chio fa·le·gna·me, che a·ve·va no·me mae·stro An·to·nio, se ben·ché tut·ti lo chia·ma·va·no mae·stro Ci·lie·gia, per via del·la pun·ta del suo na·so, che e·ra sem·pre lu·ci·da e vio·la·cea, pro·prio co·me u·na ci·lie·gia ma·tu·ra. Non ap·pe·na mae·stro Ci·lie·gia eb·be ve·du·to quel pez·zo di le·gno, si ral·le·grò tut·to; e, fre·gan·do·si le ma·ni dal·la con·ten·tez·za, bor·bot·tò so·ta vo·ce: Que·sto le·gno è ca·pi·ta·to a fa·giu·o·lo: vo·glio ser·vir·me·ne per fa·re u·na gam·ba di ta·vo·lo.' },
+      { id: 'pi2', title: 'Pinocchio – il naso che cresce (cap. XVII)', level: 1, body: 'La bu·gi·a, ve·de·te, si co·no·sce su·bi·to, per·ché ce ne so·no di due spe·cie: ci so·no le bu·gie che han·no le gam·be cor·te, e le bu·gie che han·no il na·so lun·go. La tua bu·gia è evi·den·te·men·te di quel·la se·con·da spe·cie. Pi·noc·chio, non sa·pen·do più do·ve na·scon·der·si per la ver·go·gna, ten·tò di scap·pa·re fuo·ri del·la stan·za; ma non gli riu·scì, per·ché il suo na·so e·ra di·ven·ta·to tan·to lun·go che non pas·sa·va più per l'u·scio. La Fa·ta la·sciò ri·de·re e pian·ge·re il bu·rat·ti·no per un bel pez·zo; poi, mos·sa a com·pas·sio·ne, bat·té le ma·ni in·sie·me e a quel se·gno en·tra·ro·no nel·la stan·za un mi·glia·io di gros·si uc·cel·li chia·ma·ti Pic·chi, i qua·li si pos·a·ro·no tut·ti sul na·so di Pi·noc·chio e co·min·cia·ro·no a bec·car·lo co·sì a·ca·ni·ta·men·te, che in po·chi mi·nu·ti quel na·so enor·me e smi·su·ra·to si tro·vò ri·dot·to al·la sua gran·dez·za na·tu·ra·le.' },
+      // ── Alice nel paese delle meraviglie (Carroll, trad. libera, dominio pubblico) ──
+      { id: 'al1', title: 'Alice – nel paese delle meraviglie (cap. I)', level: 1, body: 'A·li·ce co·min·cia·va a es·se·re stan·ca di star se·du·ta sul·la spon·da del fiu·me vi·ci·no a sua so·rel·la sen·za a·ver nien·te da fa·re: a·ve·va sbi·rcia·to u·na vol·ta o due il li·bro che sua so·rel·la sta·va leg·gen·do, ma non c'e·ra·no fi·gu·re né dia·lo·ghi, e a che co·sa ser·ve un li·bro sen·za fi·gu·re o dia·lo·ghi? pen·sa·va A·li·ce. Co·sì sta·va cer·can·do di de·ci·de·re se sa·reb·be sta·ta la pe·na di al·zar·si e an·da·re a rac·co·glie·re del·le mar·ghe·ri·te per far·si u·na cor·o·na, quan·do tut·ta in u·na vol·ta un Co·ni·glio Bian·co da·gli oc·chi ro­sei le pas·sò di cor·sa da·van·ti. Non c'e·ra nien·te di tan·to stra·no in ciò; né A·li·ce tro·vò co·sì tan·to fuo·ri del·l'or·di·na·rio sen·ti·re il Co·ni·glio di·re a mez·za vo·ce: Oh si·gno·re! Oh si·gno·re! Fa·rò tar·di! (Quan·do ci ri·pen·sò do·po, le sem·brò che a·vreb·be do·vu·to me·ra·vi·gliar·si, ma sul mo·men·to tut·to le sem·brò mol·to na·tu·ra·le.) Ma quan·do il Co·ni·glio ti·rò fuo·ri u·n'ef·fet·ti·vo oro·lo·gio da ta·schi·no dal ta·schi·no del gi·let, lo guar·dò, e poi si mes·se a cor·re·re di nuo·vo, A·li·ce bal·zò in pie·di per·ché le ba·le·nò per la men·te che non a·ve·va mai vi·sto pri·ma un co·ni·glio con un gi·let e un oro·lo·gio.' },
+      { id: 'al2', title: 'Alice – la regina e le rose (cap. VIII)', level: 2, body: 'Un gran·de ro·sa·io se·de·va pres·so l'in·gres·so del giar·di·no, e le ro·se che vi cre·sce·va·no e·ra·no bian·che, ma c'e·ra·no tre giar·di·nie·ri che le sta·va·no di·pin·gen·do di ros·so. A·li·ce tro·vò la co·sa mol·to stra·na e si av·vi·ci·nò per guar·da·re, e pro·prio men·tre ar·ri·va·va a sen·ti·re uno di lo·ro di·re: At·ten·zio·ne, Cin·que! Non schiz·za·re ver·ni·ce ad·dos·so a me in quel mo·do! Cin·que ri·spo·se con un cer·to ri·sen·ti·men·to: Non è col·pa mia, è Sta·te che mi ha spin·to il go·mi·to. Su que·sto Set·te al·zò gli oc·chi e dis·se: E·co·co·sì, Cin·que! Sca·ri·ca sem·pre la col·pa su·gli al·tri! Sen·ti chi par·la! ri·tor·cè Cin·que. I·e·ri la Re·gi·na di·ce·va che me·ri·ta·vi di es·se·re de·ca·pi·ta·to! A·li·ce che a·ve·va co·min·cia·to a pas·sa·re ol·tre, si fer·mò a guar·dar·li e poi vol·len·do sa·pe·re il per·ché di quel·la stra·na oc·cu·pa·zio·ne chie·se: Po·tre·ste dir·mi per fa·vo·re per·ché state di·pin·gen·do quel·le ro·se?' }
+    ]
+    sylWords: [
+      { word: 'GOR·IL·LA', emoji: '🦍', level: 0 },
+      { word: 'FI·NE·STRA', emoji: '🪟', level: 0 },
+      { word: 'OM·BREL·LO', emoji: '☂️', level: 0 },
+      { word: 'CAR·ROZ·ZA', emoji: '🚗', level: 0 },
+      { word: 'CAL·ZET·TA', emoji: '🧦', level: 0 },
+      { word: 'PUL·CI·NO', emoji: '🐤', level: 0 },
+      { word: 'MA·TI·TA', emoji: '✏️', level: 0 },
+      { word: 'BIC·CHIE·RE', emoji: '🥤', level: 0 },
+      { word: 'CO·CO·ME·RO', emoji: '🍉', level: 0 },
+      { word: 'CA·VA·LLO', emoji: '🐴', level: 0 },
+      { word: 'FAR·FAL·LA', emoji: '🦋', level: 1 },
+      { word: 'TEM·PE·STA', emoji: '⛈️', level: 1 },
+      { word: 'GHI·AC·CIA·IO', emoji: '🧊', level: 1 },
+      { word: 'FOR·MI·CA·IO', emoji: '🐜', level: 1 },
+      { word: 'PA·PA·GAL·LO', emoji: '🦜', level: 1 },
+      { word: 'CA·VAL·LET·TO', emoji: '🎠', level: 1 },
+      { word: 'BIC·CI·CLET·TA', emoji: '🚲', level: 1 },
+      { word: 'SEM·A·FO·RO', emoji: '🚦', level: 1 },
+      { word: 'E·LET·TRI·CI·TÀ', emoji: '⚡', level: 2 },
+      { word: 'CA·PI·TOM·BO·LO', emoji: '🤸', level: 2 },
+      { word: 'E·QUI·LI·BRI·STA', emoji: '🎪', level: 2 },
+      { word: 'CA·LEI·DO·SCO·PIO', emoji: '🔭', level: 2 },
+      { word: 'MI·CRO·SCO·PIO', emoji: '🔬', level: 2 },
+      { word: 'AR·CHI·TET·TU·RA', emoji: '🏛️', level: 2 }
+    ],
+    imgWords: [
+      // Livello 1 — parole comuni, emoji universalmente riconoscibili
+      { word: 'GATTO', emoji: '🐱', level: 0 },
+      { word: 'CANE', emoji: '🐶', level: 0 },
+      { word: 'PESCE', emoji: '🐟', level: 0 },
+      { word: 'MELA', emoji: '🍎', level: 0 },
+      { word: 'SOLE', emoji: '☀️', level: 0 },
+      { word: 'LUNA', emoji: '🌙', level: 0 },
+      { word: 'TRENO', emoji: '🚂', level: 0 },
+      { word: 'FIORE', emoji: '🌸', level: 0 },
+      { word: 'FARFALLA', emoji: '🦋', level: 0 },
+      { word: 'CONIGLIO', emoji: '🐇', level: 0 },
+      { word: 'FRAGOLA', emoji: '🍓', level: 0 },
+      { word: 'PANE', emoji: '🍞', level: 0 },
+      // Livello 2 — parole più lunghe, concetti visivi chiari
+      { word: 'CAPPELLO', emoji: '🎩', level: 1 },
+      { word: 'BICICLETTA', emoji: '🚲', level: 1 },
+      { word: 'CHITARRA', emoji: '🎸', level: 1 },
+      { word: 'OMBRELLO', emoji: '☂️', level: 1 },
+      { word: 'COCCODRILLO', emoji: '🐊', level: 1 },
+      { word: 'ELEFANTE', emoji: '🐘', level: 1 },
+      { word: 'GIRASOLE', emoji: '🌻', level: 1 },
+      { word: 'CASTELLO', emoji: '🏰', level: 1 },
+      { word: 'VULCANO', emoji: '🌋', level: 1 },
+      { word: 'ANANAS', emoji: '🍍', level: 1 },
+      { word: 'PINGUINO', emoji: '🐧', level: 1 },
+      { word: 'ASTRONAVE', emoji: '🛸', level: 1 },
+      // Livello 3 — parole rare, multi-sillabiche
+      { word: 'MICROSCOPIO', emoji: '🔬', level: 2 },
+      { word: 'TELESCOPIO', emoji: '🔭', level: 2 },
+      { word: 'PATTINAGGIO', emoji: '⛸️', level: 2 },
+      { word: 'PIPISTRELLO', emoji: '🦇', level: 2 },
+      { word: 'FRANCOBOLLO', emoji: '🏷️', level: 2 },
+      { word: 'CAMALEONTE', emoji: '🦎', level: 2 },
+      { word: 'LUMINESCENZA', emoji: '✨', level: 2 }
+    ],
+    visWords: [
+      { word: 'DADO', distractors: ['DADO', 'BADO', 'DABO', 'DADO', 'DODO', 'DADA', 'DADO', 'BADO'], level: 0 },
+      { word: 'PALLA', distractors: ['PALLA', 'BALLA', 'PALLA', 'PALLE', 'DALLA', 'PALLA', 'PALLA', 'BALLA'], level: 0 },
+      { word: 'PORTA', distractors: ['PORTA', 'BORTA', 'PORTA', 'TORTA', 'PORTA', 'POSTA', 'PORTA', 'CORTA'], level: 0 },
+      { word: 'LIBRO', distractors: ['LIBRO', 'LIBBO', 'LIBRO', 'LIBRA', 'LIPRO', 'LIBRO', 'LIBRI', 'LIBRO'], level: 0 },
+      { word: 'TEMPO', distractors: ['TEMPO', 'TEMPO', 'TEMBO', 'TEBMO', 'TEMPO', 'TEPMO', 'TEMPA', 'TEMPO'], level: 0 },
+      { word: 'NOTTE', distractors: ['NOTTE', 'MOTTE', 'NOTTE', 'NOTTE', 'NONTE', 'NOTPE', 'NOTTE', 'NOTTO'], level: 1 },
+      { word: 'STELLE', distractors: ['STELLE', 'STALLE', 'STELLE', 'STELLI', 'STELLE', 'STELE', 'STELLE', 'STALLE'], level: 1 },
+      { word: 'CAVALLO', distractors: ['CAVALLO', 'CABALLO', 'CAVALLO', 'CAVALLO', 'CAVLLO', 'COVALLO', 'CAVALLO', 'CAVAILO'], level: 1 },
+      { word: 'FRATELLO', distractors: ['FRATELLO', 'FRATELLO', 'FRATELLO', 'FARTELLO', 'FRATELLO', 'FRATELO', 'FRATELLI', 'FRATELLO'], level: 1 },
+      { word: 'SPECCHIO', distractors: ['SPECCHIO', 'SPRECCHIO', 'SPECCHIO', 'SPECHIO', 'SPECCHIO', 'SBECCHIO', 'SPECCHIO', 'SPECCIHO'], level: 2 },
+      { word: 'GHIACCIO', distractors: ['GHIACCIO', 'GHIACCIO', 'GHIACHCIO', 'GHIACCHIO', 'GHIACCIO', 'GHIACCOI', 'GHIACCIO', 'GHIÀCCIO'], level: 2 },
+      { word: 'STRUMENTO', distractors: ['STRUMENTO', 'STRUMENTO', 'STURMENTO', 'STRUMENTO', 'STUMENTO', 'STRUMENTO', 'STRUMERTO', 'STRUMENTO'], level: 2 }
+    ],
+    // letterWords: completa la parola con la lettera mancante (focus su b/d/p/q, doppie, sc/sp/st)
+    letterWords: [
+      // Livello 1 — confusioni classiche b/d, p/q
+      { word: 'DADO', missing: 0, options: ['D','B','P','Q'], correct: 'D', emoji: '🎲', level: 0 },
+      { word: 'BADO', missing: 0, options: ['B','D','P','Q'], correct: 'B', emoji: '🧸', level: 0 },
+      { word: 'PALLA', missing: 0, options: ['P','B','D','Q'], correct: 'P', emoji: '⚽', level: 0 },
+      { word: 'BELLO', missing: 0, options: ['B','D','P','R'], correct: 'B', emoji: '⭐', level: 0 },
+      { word: 'PORTA', missing: 0, options: ['P','B','D','T'], correct: 'P', emoji: '🚪', level: 0 },
+      { word: 'DENTE', missing: 0, options: ['D','B','P','T'], correct: 'D', emoji: '🦷', level: 0 },
+      { word: 'PESCE', missing: 0, options: ['P','B','D','F'], correct: 'P', emoji: '🐟', level: 0 },
+      { word: 'BARCA', missing: 0, options: ['B','D','P','V'], correct: 'B', emoji: '⛵', level: 0 },
+      // Livello 2 — doppie insidiose (ff/pp/bb/dd) + confusioni interne
+      { word: 'CA_ELLO', missing: 2, display: 'CA__ELLO', options: ['V','B','P','D'], correct: 'V', emoji: '🐴', hint: 'CA_ALLO', level: 1, template: ['C','A','?','A','L','L','O'], missingIdx: 2, missingOptions: ['V','B','P','T'] },
+      { word: 'CONIGLIO', missing: 2, options: ['N','M','P','B'], correct: 'N', emoji: '🐇', hint: 'CO_IGLIO', level: 1, template: ['C','O','?','I','G','L','I','O'], missingIdx: 2, missingOptions: ['N','M','R','B'] },
+      { word: 'PAPPA', missing: 1, options: ['A','P','B','D'], correct: 'P', emoji: '🍲', hint: 'PA_PA', level: 1, template: ['P','A','?','P','A'], missingIdx: 2, missingOptions: ['P','B','D','T'] },
+      { word: 'BABBO', missing: 1, options: ['B','D','P','V'], correct: 'B', emoji: '👨', hint: 'BA_BO', level: 1, template: ['B','A','?','B','O'], missingIdx: 2, missingOptions: ['B','D','P','V'] },
+      { word: 'NOTTE', missing: 1, options: ['T','D','P','B'], correct: 'T', emoji: '🌙', hint: 'NO_TE', level: 1, template: ['N','O','?','T','E'], missingIdx: 2, missingOptions: ['T','D','N','P'] },
+      { word: 'BOSCO', missing: 1, options: ['S','Z','C','P'], correct: 'S', emoji: '🌲', hint: 'BO_CO', level: 1, template: ['B','O','?','C','O'], missingIdx: 2, missingOptions: ['S','Z','C','F'] },
+      // Livello 3 — gruppi consonantici difficili, doppie nei gruppi
+      { word: 'GHIACCIO', missing: 2, options: ['I','C','H','A'], correct: 'I', emoji: '🧊', hint: 'GH_ACCIO', level: 2, template: ['G','H','?','A','C','C','I','O'], missingIdx: 2, missingOptions: ['I','A','E','U'] },
+      { word: 'SCHERZO', missing: 1, options: ['C','S','Z','Q'], correct: 'C', emoji: '😜', hint: 'S_HERZO', level: 2, template: ['S','?','H','E','R','Z','O'], missingIdx: 1, missingOptions: ['C','G','Q','Z'] },
+      { word: 'SQUALO', missing: 1, options: ['Q','C','G','K'], correct: 'Q', emoji: '🦈', hint: 'S_UALO', level: 2, template: ['S','?','U','A','L','O'], missingIdx: 1, missingOptions: ['Q','C','G','K'] },
+      { word: 'STREGA', missing: 1, options: ['T','D','P','B'], correct: 'T', emoji: '🧙', hint: 'S_REGA', level: 2, template: ['S','?','R','E','G','A'], missingIdx: 1, missingOptions: ['T','D','P','B'] }
+    ]
+  },
+  en: {
+    texts: [
+      // ── LEVEL 1 ──────────────────────────────────────────────────────────
+      { id: 'lp1', title: 'The Little Prince – the boa constrictor (ch. 1)', level: 0, body: 'Once when I was six years old I saw a mag·nif·i·cent pic·ture in a book called True Sto·ries from Na·ture a·bout the prim·e·val for·est. It was a pic·ture of a boa con·stric·tor in the act of swal·low·ing an a·ni·mal. In the book it said: Boa con·stric·tors swal·low their prey whole with·out chew·ing it. Af·ter that they are not a·ble to move and they sleep through the six months that they need for di·ges·tion. I pon·dered deep·ly then o·ver the ad·ven·tures of the jun·gle. And af·ter some work with a col·ored pen·cil I suc·ceed·ed in mak·ing my first draw·ing. My Draw·ing Num·ber One. I showed my mas·ter·piece to the grown·ups and asked them wheth·er the draw·ing fright·ened them. But they an·swered: Fright·en? Why should a·ny·one be fright·ened by a hat? My draw·ing was not a pic·ture of a hat. It was a pic·ture of a boa con·stric·tor di·gest·ing an e·le·phant. The grown·ups re·sponse this time was to ad·vise me to lay a·side my draw·ings of boa con·stric·tors and de·vote my·self in·stead to ge·og·ra·phy his·to·ry a·rith·me·tic and gram·mar. That is why at the age of six I gave up what might have been a mag·nif·i·cent ca·reer as a paint·er. Grown·ups nev·er un·der·stand a·ny·thing by them·selves and it is tire·some for chil·dren to be al·ways and for·ev·er ex·plain·ing things to them.' },
+      { id: 'lp2', title: 'The Little Prince – in the desert (ch. 2)', level: 0, body: 'So I lived my life a·lone with·out a·ny·one that I could real·ly talk to un·til I had an ac·ci·dent with my plane in the Sa·ha·ra Des·ert six years a·go. Some·thing was bro·ken in my en·gine. And as I had with me nei·ther a me·chan·ic nor a·ny pas·sen·gers I set my·self to at·tempt the dif·fi·cult re·pairs all a·lone. It was a ques·tion of life or death for me: I had bare·ly e·nough drink·ing wa·ter to last a week. The first night then I went to sleep on the sand a thou·sand miles from a·ny hu·man ha·bi·ta·tion. I was more i·so·lat·ed than a ship·wrecked sail·or on a raft in the mid·dle of the o·cean. Thus you can i·mag·ine my a·maze·ment at sun·rise when I was a·wak·ened by an odd lit·tle voice. It said: Please draw me a sheep! I jumped to my feet com·plete·ly thun·der·struck. I rubbed my eyes hard. I looked care·ful·ly all a·round me. And I saw a most ex·traor·di·na·ry small per·son who stood there ex·am·in·ing me with great se·ri·ous·ness. Here you may see the best por·trait that lat·er I was a·ble to make of him. But my draw·ing is cer·tain·ly much less charm·ing than its mod·el.' },
+      { id: 'e1', title: 'The clever fox', level: 0, body: 'A cle·ver fox with bright or·ange fur lived at the edge of a dark for·est near a small vil·lage. She had a long bush·y tail and quick sharp eyes that no·ticed eve·ry·thing. Eve·ry eve·ning she would sneak through the hedge in·to the farm·yard to steal eggs from the chick·en coop. The farm·er had tried eve·ry·thing to stop her: traps, fenc·es, a watch·dog named Bo·zo. But the fox was too cle·ver for all of them. One night she found her·self cor·nered be·hind the barn with no way out. The farm·er stood in front of her with a lan·tern. But in·stead of run·ning the fox sat down calm·ly and said: I know where the rab·bits are steal·ing your cab·bages. Let me show you and we can help each oth·er. The farm·er thought for a mo·ment and a·greed. From that night on the fox lived peace·ful·ly near the farm and the farm·er nev·er missed a sin·gle cab·bage a·gain.' },
+      { id: 'e2', title: 'The lighthouse keeper', level: 0, body: 'Old Thomas lived a·lone in a tall white light·house perched on a ro·cky cliff a·bove the sea. Eve·ry e·ven·ing as the sun sank be·low the ho·ri·zon he would climb the long spi·ral stair·case that wound up through the cen·tre of the tower. At the top he would wind up the great clock·work mech·a·nism and light the pow·er·ful lamp that ro·ta·ted through the night to warn ships a·way from the dan·ger·ous rocks be·low. On storm·y nights the wind would howl a·round the tower and the waves would crash thun·der·ous·ly a·gainst the cliff. The light·house shook slight·ly but Thomas al·ways stayed calm drink·ing his tea and read·ing his books. He had been keep·ing that light for for·ty years and knew ev·ery sound the build·ing made. Sail·ors who had been saved by his light would some·times row a·shore to bring him gifts: books tins of bis·cuits and a bot·tle of good wine. Thomas was nev·er lone·ly. The sea was his com·pan·y and the stars were his friends.' },
+      // ── LEVEL 2 ──────────────────────────────────────────────────────────
+      { id: 'lp3', title: 'The Little Prince – the fox and taming (ch. 21)', level: 1, body: 'It was then that the fox ap·peared. Good morn·ing said the fox. Good morn·ing re·plied the lit·tle prince who turned a·round but saw noth·ing. I am here un·der the ap·ple tree said the voice. Who are you asked the lit·tle prince and you are ve·ry pret·ty. I am a fox said the fox. Come and play with me pro·posed the lit·tle prince. I am so un·hap·py. I can·not play with you said the fox. I am not yet tamed. Ah ex·cuse me said the lit·tle prince. But af·ter some thought he added: What does tamed mean? Men have for·got·ten this truth said the fox. But you must not for·get it. You be·come re·spon·si·ble for·ev·er for what you have tamed. You are re·spon·si·ble for your rose. I am re·spon·si·ble for my rose re·peat·ed the lit·tle prince so that he would be sure to re·mem·ber it. One sees clear·ly on·ly with the heart. What is es·sen·tial is in·vi·si·ble to the eye. What is es·sen·tial is in·vi·si·ble to the eye re·peat·ed the lit·tle prince so that he would be sure to re·mem·ber it.' },
+      { id: 'e3', title: 'The underground river', level: 1, body: 'Deep be·neath the lime·stone moun·tains of the re·gion there flows a ri·ver that no one has ev·er seen from the sur·face. It be·gins as rain·wa·ter seep·ing through cracks in the rock then gath·ers speed as it drops through cav·erns and tun·nels carved o·ver thou·sands of years by the ac·tion of wa·ter on soft stone. The few spe·le·o·log·ists who have ex·plored those caves de·scribe walls cov·ered in glit·ter·ing crys·tals and ceil·ings hung with sta·lac·tites as thin as nee·dles. Strange blind fish live in the wa·ter their eyes use·less in the per·fect dark·ness of the deep rock. The wa·ter it·self is so pure and cold that it tastes un·like a·ny·thing you have drunk be·fore. Af·ter run·ning for sev·en·teen ki·lo·me·tres be·neath the moun·tain the ri·ver fi·nal·ly e·merges as a spring known to the vil·la·gers of the val·ley for cen·tur·ies. They call it the Blue Eye be·cause of the col·our the wa·ter turns when sun·light hits it at mid·day.' },
+      { id: 'e4', title: 'The winter market', level: 1, body: 'On the last Sat·ur·day of No·vem·ber be·fore the first snow of the sea·son has had time to fall the main square of the town fills be·fore dawn with stalls and their own·ers. By eight o'clock the smell of roast·ing chest·nuts drifts through the fro·zen air and mix·es with cin·na·mon from the mulled wine stand at the cor·ner. Fam·i·lies ar·rive in their thick·est coats and scarves chil·dren drag·ging par·ents from one stall to the next. There are hand·carved wood·en toys can·dles scent·ed with pine and or·ange peel knit·ted hats in ev·ery col·our and jars of home·made jam ar·ranged in neat rows like a small rain·bow. A choir of school·chil·dren stands near the foun·tain and sings car·ols their breath vis·i·ble in the cold air. By four o'clock the light is al·ready fail·ing but the square stays bright with thou·sands of twin·kling bulbs strung be·tween the build·ings. The stall own·ers pack up slow·ly laugh·ing and count·ing their coins and the square emp·ties one fam·i·ly at a time un·til on·ly the lights re·main.' },
+      // ── LEVEL 3 ──────────────────────────────────────────────────────────
+      { id: 'lp4', title: 'The Little Prince – the rose (ch. 8)', level: 2, body: 'I ought to have judged by deeds and not by words. She cast her fra·grance and her ra·di·ance o·ver me. I ought nev·er to have run a·way from her. I ought to have guessed all the af·fec·tion that lay be·hind her poor lit·tle stratagems. Flow·ers are so in·con·sis·tent! But I was too young to know how to love her. I be·lieve that for his es·cape he took ad·van·tage of the mi·gra·tion of a flock of wild birds. On the morn·ing of his de·par·ture he put his plan·et in per·fect or·der. He care·ful·ly cleaned out his ac·tive vol·ca·noes. He pos·sessed two ac·tive vol·ca·noes and they were ve·ry con·ven·ient for heat·ing his break·fast in the morn·ing. He al·so had one ex·tinct vol·ca·no. But as he said one nev·er knows. So he cleaned out the ex·tinct vol·ca·no too. If they are well cleaned out vol·ca·noes burn slow·ly and stead·i·ly with·out e·rup·tions. Vol·can·ic e·rup·tions are like fires in a chim·ney. On our earth we are ob·vi·ous·ly too small to clean our vol·ca·noes. That is why they bring no end of trou·ble up·on us.' },
+      { id: 'e5', title: 'The observatory on the hill', level: 2, body: 'Perched on the high·est point of the hill o·ver·look·ing the town the ob·ser·va·to·ry had been track·ing the move·ments of plan·ets co·mets and dis·tant gal·ax·ies for near·ly two cen·tur·ies. Its great tel·e·scope whose main mir·ror had been ground by hand from a spe·cial al·loy of glass and sil·i·ca by a Ger·man op·ti·cian in the eigh·teenth cen·tu·ry re·mained to this day one of the most pre·cise in·stru·ments in the coun·try. The as·tron·o·mers who worked there through the night had in·her·it·ed thick log·books filled with meas·ure·ments and hand·drawn charts go·ing back to the found·ing of the in·sti·tu·tion. They knew that the light reach·ing their eyes had left its source thou·sands some·times mil·lions of years be·fore a·ny hu·man be·ing had learned to write. This thought which might have made oth·er peo·ple feel small made the as·tron·o·mers feel pro·found·ly con·nect·ed to some·thing vast·er than them·selves. The young·est of them a doc·tor·al stu·dent named El·sa liked to re·mind her col·leagues that the par·tic·les in their own bod·ies had been forged in·side a star that ex·plod·ed be·fore the earth ex·ist·ed.' },
+      // ── Pinocchio (Collodi, public domain English translation) ──────────
+      { id: 'pen1', title: 'Pinocchio – the puppet (ch. 1)', level: 0, body: 'Once up·on a time there was... A king! my lit·tle read·ers will im·me·di·ate·ly say. No chil·dren you are mis·tak·en. Once up·on a time there was a piece of wood. It was not a·ny fine wood but just a plain or·di·na·ry piece such as is used in win·ter to make fires and to burn in stoves and fire·plac·es. I do not know how it came to pass but the fact is that one fine day this piece of wood was ly·ing in the shop of an old car·pen·ter whose name was Mas·ter An·tho·ny. That was what peo·ple called him though eve·ry·one in the vil·lage called him Mas·ter Cher·ry be·cause the tip of his nose was al·ways shin·ing and pur·plish just like a ripe cher·ry. No soon·er had Mas·ter Cher·ry set eyes on the piece of wood than his face lit up with de·light and he rub·bed his hands to·geth·er with sat·is·fac·tion and said soft·ly to him·self: This wood has come just at the right mo·ment; I will use it to make the leg of a lit·tle ta·ble.' },
+      { id: 'pen2', title: 'Pinocchio – the growing nose (ch. 17)', level: 1, body: 'Lies my dear child are found out im·me·di·ate·ly be·cause they are of two kinds. There are lies that have short legs and lies that have long noses. Your lie hap·pens to be one of those that have a long nose. Pi·noch·io not know·ing where to hide him·self for shame tried to run out of the room but he did not suc·ceed be·cause his nose had grown so much that it could not pass through the door. The Fai·ry let him cry for some time and then see·ing that he was quite spent she took pit·y on him and struck her hands to·geth·er. At this sig·nal a thou·sand large birds called Wood·peck·ers flew in at the win·dow and be·gan to peck so hard at Pi·noch·io's nose that in a few min·utes that im·mense and ov·er·grown nose had been re·duced to its nat·u·ral size.' },
+      // ── Alice in Wonderland (Carroll, public domain) ─────────────────────
+      { id: 'aw1', title: 'Alice in Wonderland – down the rabbit hole (ch. 1)', level: 1, body: 'Al·ice was be·gin·ning to get ve·ry tired of sit·ting by her sis·ter on the bank and of hav·ing noth·ing to do: once or twice she had peeped in·to the book her sis·ter was read·ing but it had no pic·tures or con·ver·sa·tions in it and what is the use of a book thought Al·ice with·out pic·tures or con·ver·sa·tion? So she was con·sid·er·ing in her own mind as well as she could for the hot day made her feel ve·ry sleep·y and stu·pid wheth·er the pleas·ure of mak·ing a dai·sy chain would be worth the trou·ble of get·ting up and pick·ing the dai·sies when sud·den·ly a White Rab·bit with pink eyes ran close by her. There was noth·ing so ve·ry re·mark·a·ble in that; nor did Al·ice think it so ve·ry much out of the way to hear the Rab·bit say to it·self: Oh dear! Oh dear! I shall be too late! But when the Rab·bit ac·tual·ly took a watch out of its waist·coat pocket and looked at it and then hur·ried on Al·ice start·ed to her feet for it flashed a·cross her mind that she had nev·er be·fore seen a rab·bit with ei·ther a waist·coat pocket or a watch to take out of it.' },
+      { id: 'aw2', title: 'Alice – painting the roses red (ch. 8)', level: 2, body: 'A large rose tree stood near the en·trance of the gar·den and the ros·es grow·ing on it were white but there were three gar·den·ers at it bus·i·ly paint·ing them red. Al·ice thought this a ve·ry cu·ri·ous thing and she went near·er to watch them and just as she came up to them she heard one of them say: Look out now Five! Don't go splash·ing paint o·ver me like that! I could not help it said Five in a sul·ky tone: Sev·en jogged my el·bow. On which Sev·en looked up and said: That's right Five! Al·ways lay the blame on oth·ers! You'd bet·ter not talk! said Five: I heard the Queen say on·ly yes·ter·day you de·served to be behead·ed! What for? said the one who had first spo·ken. That's none of your bus·i·ness Two! said Sev·en. Yes it is his bus·i·ness said Five and I'll tell him: it was for bring·ing the cook tu·lip roots in·stead of on·ions. Sev·en flung down his brush and had just be·gun: Well of all the un·just things when his eye chanced to fall up·on Al·ice as she stood watch·ing them and he checked him·self sud·den·ly.' }
+    ]
+    sylWords: [
+      { word: 'CHICK·EN', emoji: '🐔', level: 0 },
+      { word: 'WIN·DOW', emoji: '🪟', level: 0 },
+      { word: 'THUN·DER', emoji: '⛈️', level: 0 },
+      { word: 'SQUIR·REL', emoji: '🐿️', level: 0 },
+      { word: 'SHOUL·DER', emoji: '💪', level: 0 },
+      { word: 'WHIS·PER', emoji: '🤫', level: 0 },
+      { word: 'POCK·ET', emoji: '🧥', level: 0 },
+      { word: 'FEATH·ER', emoji: '🪶', level: 0 },
+      { word: 'BUT·TER·FLY', emoji: '🦋', level: 1 },
+      { word: 'EL·E·PHANT', emoji: '🐘', level: 1 },
+      { word: 'HOS·PI·TAL', emoji: '🏥', level: 1 },
+      { word: 'CAL·EN·DAR', emoji: '📅', level: 1 },
+      { word: 'CAT·ER·PIL·LAR', emoji: '🐛', level: 1 },
+      { word: 'U·MAN·BREL·LA', emoji: '☂️', level: 1 },
+      { word: 'U·NI·VER·SI·TY', emoji: '🎓', level: 2 },
+      { word: 'AL·LI·GA·TOR', emoji: '🐊', level: 2 },
+      { word: 'TEL·E·SCOPE', emoji: '🔭', level: 2 },
+      { word: 'AC·CEL·ER·ATE', emoji: '🚀', level: 2 },
+      { word: 'A·STRON·O·MER', emoji: '🌌', level: 2 }
+    ],
+    imgWords: [
+      // Level 1 — universally recognised emoji
+      { word: 'CAT', emoji: '🐱', level: 0 },
+      { word: 'DOG', emoji: '🐶', level: 0 },
+      { word: 'FISH', emoji: '🐟', level: 0 },
+      { word: 'SUN', emoji: '☀️', level: 0 },
+      { word: 'MOON', emoji: '🌙', level: 0 },
+      { word: 'TRAIN', emoji: '🚂', level: 0 },
+      { word: 'APPLE', emoji: '🍎', level: 0 },
+      { word: 'FLOWER', emoji: '🌸', level: 0 },
+      { word: 'RABBIT', emoji: '🐇', level: 0 },
+      { word: 'BUTTERFLY', emoji: '🦋', level: 0 },
+      { word: 'BREAD', emoji: '🍞', level: 0 },
+      { word: 'STRAWBERRY', emoji: '🍓', level: 0 },
+      // Level 2
+      { word: 'ELEPHANT', emoji: '🐘', level: 1 },
+      { word: 'UMBRELLA', emoji: '☂️', level: 1 },
+      { word: 'GUITAR', emoji: '🎸', level: 1 },
+      { word: 'CASTLE', emoji: '🏰', level: 1 },
+      { word: 'PENGUIN', emoji: '🐧', level: 1 },
+      { word: 'CROCODILE', emoji: '🐊', level: 1 },
+      { word: 'SUNFLOWER', emoji: '🌻', level: 1 },
+      { word: 'PINEAPPLE', emoji: '🍍', level: 1 },
+      { word: 'VOLCANO', emoji: '🌋', level: 1 },
+      { word: 'SPACESHIP', emoji: '🛸', level: 1 },
+      // Level 3
+      { word: 'TELESCOPE', emoji: '🔭', level: 2 },
+      { word: 'MICROSCOPE', emoji: '🔬', level: 2 },
+      { word: 'CATERPILLAR', emoji: '🐛', level: 2 },
+      { word: 'CHAMELEON', emoji: '🦎', level: 2 },
+      { word: 'THERMOMETER', emoji: '🌡️', level: 2 },
+      { word: 'XYLOPHONE', emoji: '🎵', level: 2 }
+    ],
+    visWords: [
+      { word: 'BIRD', distractors: ['BIRD', 'DIRD', 'BIRD', 'BRID', 'BIRD', 'PIRD', 'BERD', 'BIRD'], level: 0 },
+      { word: 'POND', distractors: ['POND', 'BOND', 'POND', 'PAND', 'POND', 'PONB', 'POOD', 'POND'], level: 0 },
+      { word: 'SHIP', distractors: ['SHIP', 'SNIP', 'SHIP', 'CHIP', 'SHIP', 'SHIB', 'SHOP', 'SHIP'], level: 0 },
+      { word: 'STORM', distractors: ['STORM', 'STORE', 'STORM', 'STROM', 'STORM', 'STARM', 'STORM', 'STOMP'], level: 0 },
+      { word: 'BRIDGE', distractors: ['BRIDGE', 'BRINGE', 'BRIDGE', 'BRIDDE', 'BRIDGE', 'BRIGDE', 'BRIDGE', 'BRIGE'], level: 1 },
+      { word: 'THREAD', distractors: ['THREAD', 'THREED', 'THREAD', 'TREAD', 'THREAD', 'THRAED', 'THREAD', 'THRRAD'], level: 1 },
+      { word: 'FRIEND', distractors: ['FRIEND', 'FREIND', 'FRIEND', 'FRINED', 'FRIEND', 'FREND', 'FRIEND', 'FRÍEND'], level: 1 },
+      { word: 'THOUGHT', distractors: ['THOUGHT', 'THOUGT', 'THOUGHT', 'THOGUHT', 'THOUGHT', 'THUOGHT', 'THOUGHT', 'THOUGTH'], level: 2 },
+      { word: 'SHOULDER', distractors: ['SHOULDER', 'SHOUDER', 'SHOULDER', 'SHOUDLER', 'SHOULDER', 'SHOILDER', 'SHOULDER', 'SHOLUDER'], level: 2 }
+    ],
+    letterWords: [
+      { word: 'BAT', missing: 0, options: ['B','D','P','Q'], correct: 'B', emoji: '🦇', level: 0, template: ['?','A','T'], missingIdx: 0, missingOptions: ['B','D','P','Q'] },
+      { word: 'DAD', missing: 0, options: ['D','B','P','T'], correct: 'D', emoji: '👨', level: 0, template: ['?','A','D'], missingIdx: 0, missingOptions: ['D','B','P','T'] },
+      { word: 'PET', missing: 0, options: ['P','B','D','T'], correct: 'P', emoji: '🐾', level: 0, template: ['?','E','T'], missingIdx: 0, missingOptions: ['P','B','D','T'] },
+      { word: 'BED', missing: 2, options: ['D','B','P','T'], correct: 'D', emoji: '🛏️', level: 0, template: ['B','E','?'], missingIdx: 2, missingOptions: ['D','B','P','T'] },
+      { word: 'POD', missing: 0, options: ['P','B','D','Q'], correct: 'P', emoji: '🌱', level: 0, template: ['?','O','D'], missingIdx: 0, missingOptions: ['P','B','D','Q'] },
+      { word: 'BIRD', missing: 0, options: ['B','D','P','Q'], correct: 'B', emoji: '🐦', level: 0, template: ['?','I','R','D'], missingIdx: 0, missingOptions: ['B','D','P','Q'] },
+      { word: 'POND', missing: 1, options: ['O','P','A','E'], correct: 'O', emoji: '🌊', level: 1, template: ['P','?','N','D'], missingIdx: 1, missingOptions: ['O','A','I','E'] },
+      { word: 'BRIDGE', missing: 1, options: ['R','D','B','P'], correct: 'R', emoji: '🌉', level: 1, template: ['B','?','I','D','G','E'], missingIdx: 1, missingOptions: ['R','D','B','L'] },
+      { word: 'BOTTLE', missing: 1, options: ['T','D','P','B'], correct: 'T', emoji: '🍼', level: 1, template: ['B','O','?','T','L','E'], missingIdx: 2, missingOptions: ['T','D','P','B'] },
+      { word: 'THREAD', missing: 1, options: ['H','D','B','P'], correct: 'H', emoji: '🧵', level: 2, template: ['T','?','R','E','A','D'], missingIdx: 1, missingOptions: ['H','R','B','D'] },
+      { word: 'THOUGHT', missing: 2, options: ['O','A','E','U'], correct: 'O', emoji: '💭', level: 2, template: ['T','H','?','U','G','H','T'], missingIdx: 2, missingOptions: ['O','A','E','U'] },
+      { word: 'SHOULDER', missing: 2, options: ['O','A','E','U'], correct: 'O', emoji: '💪', level: 2, template: ['S','H','?','U','L','D','E','R'], missingIdx: 2, missingOptions: ['O','A','E','I'] }
+    ]
+  }
+};
+
+// ISLAND EMOJIS
+const ISLAND_EMOJIS = ['🌴','☀️','🦜','🌺','🐚','🏖️','🐠','🦋','🌸','🍉','⭐','🌈','🦩','🌊','🏝️','🐬'];
+
+// ============ STATE ============
+let lang = 'it';
+let level = 0;
+let currentScreen = 'home';
+let stars = 0;
+
+// Reading state
+let readingMode = "parent";
+let currentTextData = null;
+let syllableElements = [];
+let errorPositions = [];
+let readingActive = false;
+let currentSylIdx = 0;
+let autoTimer = null;
+let sessionErrors = 0;
+let readingSpeed = 1; // 0=slow 1=medium 2=fast 3=turbo
+const SPEED_MS = [1800, 1100, 600, 300]; // ms per syllable in auto mode
+
+// Syllable exercise state
+let sylWords = [];
+let sylIdx = 0;
+let sylCurrentWord = null;
+let sylSelectedSlots = [];
+let sylScore = 0;
+
+// Image match state
+let imgWords = [];
+let imgIdx = 0;
+let imgScore = 0;
+
+// Visual state
+let visWords = [];
+let visIdx = 0;
+let visScore = 0;
+
+// ============ STORAGE ============
+function save(key, val) {
+  try { localStorage.setItem('febe_' + key, JSON.stringify(val)); } catch(e) {}
+}
+function load(key, def) {
+  try {
+    const v = localStorage.getItem('febe_' + key);
+    return v !== null ? JSON.parse(v) : def;
+  } catch(e) { return def; }
+}
+
+function loadAll() {
+  stars = load('stars', 0);
+  // Load custom content merged with defaults
+  const customTexts_it = load('custom_texts_it', []);
+  const customTexts_en = load('custom_texts_en', []);
+  DEFAULT_DATA.it.texts = [...DEFAULT_DATA.it.texts.filter(t => t.id.startsWith('t')), ...customTexts_it];
+  DEFAULT_DATA.en.texts = [...DEFAULT_DATA.en.texts.filter(t => t.id.startsWith('e')), ...customTexts_en];
+  const customSyl_it = load('custom_syl_it', []);
+  const customSyl_en = load('custom_syl_en', []);
+  DEFAULT_DATA.it.sylWords = [...DEFAULT_DATA.it.sylWords, ...customSyl_it];
+  DEFAULT_DATA.en.sylWords = [...DEFAULT_DATA.en.sylWords, ...customSyl_en];
+  const customImg_it = load('custom_img_it', []);
+  const customImg_en = load('custom_img_en', []);
+  DEFAULT_DATA.it.imgWords = [...DEFAULT_DATA.it.imgWords, ...customImg_it];
+  DEFAULT_DATA.en.imgWords = [...DEFAULT_DATA.en.imgWords, ...customImg_en];
+  const customVis_it = load('custom_vis_it', []);
+  const customVis_en = load('custom_vis_en', []);
+  DEFAULT_DATA.it.visWords = [...DEFAULT_DATA.it.visWords, ...customVis_it];
+  DEFAULT_DATA.en.visWords = [...DEFAULT_DATA.en.visWords, ...customVis_en];
+}
+
+// ============ TRANSLATIONS ============
+const T = {
+  it: {
+    homeSub: 'Ciao Febe! Cosa facciamo oggi?',
+    homeStars: 'stelle',
+    menuReading: 'Leggi ad alta voce',
+    menuSyllables: 'Completa le sillabe',
+    menuImages: 'Immagine & parola',
+    menuVisual: 'Trova la parola',
+    menuIsland: 'La mia isola',
+    readingTitle: 'Lettura',
+    readingSelectLabel: 'Scegli un testo:',
+    readingInstructions: '👆 Tocca INIZIA, poi clicca ERRORE ogni volta che Febe sbaglia',
+    readingInstructionsAuto: '📖 Le sillabe si evidenziano! Leggi ogni sillaba colorata',
+    readingModeParent: '👨‍👩‍👧 Con genitore',
+    readingModeAuto: '🎮 Autonoma',
+    startBtn: '▶ Inizia',
+    nextBtn: '▶ Avanti',
+    errorBtn: '❌ Errore',
+    finishBtn: '✅ Fine lettura',
+    backLabel: '← Torna al menu',
+    resultTitle: ['Perfetta! 🌟', 'Brava Febe! ⭐', 'Continua così! 💪'],
+    resWords: 'parole',
+    resErrors: 'errori',
+    syllablesTitle: 'Sillabe',
+    sylInstructions: '🧩 Tocca le sillabe nell\'ordine giusto!',
+    imgTitle: 'Immagine',
+    imgInstructions: '🎨 Tocca la parola giusta!',
+    visTitle: 'Trova la parola',
+    visInstructions: '🔍 Tocca le parole uguali a quella evidenziata!',
+    unlockBtn: '⭐ Sblocca (10 stelle)',
+    islTitle: 'L\'isola di Febe',
+    level: ['Livello 1','Livello 2','Livello 3'],
+    nextWordBtn: 'Avanti ➡',
+    readAgain: '🔄 Leggi ancora',
+    homeBtn: '🏠 Menu',
+    noTexts: 'Nessun testo disponibile per questo livello',
+    menuLetters: 'Completa la parola',
+    letInstructions: '🔤 Scegli la lettera giusta!',
+    letTitle: 'Completa la parola',
+  },
+  en: {
+    homeSub: 'Hi Febe! What shall we do today?',
+    homeStars: 'stars',
+    menuReading: 'Read aloud',
+    menuSyllables: 'Complete syllables',
+    menuImages: 'Image & word',
+    menuVisual: 'Find the word',
+    menuIsland: 'My island',
+    readingTitle: 'Reading',
+    readingSelectLabel: 'Choose a text:',
+    readingInstructions: '👆 Tap START, then tap ERROR every time Febe makes a mistake',
+    readingInstructionsAuto: '📖 Syllables highlight! Read each coloured syllable',
+    readingModeParent: '👨‍👩‍👧 With parent',
+    readingModeAuto: '🎮 Independent',
+    startBtn: '▶ Start',
+    nextBtn: '▶ Next',
+    errorBtn: '❌ Error',
+    finishBtn: '✅ Finish reading',
+    backLabel: '← Back to menu',
+    resultTitle: ['Perfect! 🌟', 'Well done Febe! ⭐', 'Keep going! 💪'],
+    resWords: 'words',
+    resErrors: 'errors',
+    syllablesTitle: 'Syllables',
+    sylInstructions: '🧩 Tap the syllables in the right order!',
+    imgTitle: 'Image',
+    imgInstructions: '🎨 Tap the right word!',
+    visTitle: 'Find the word',
+    visInstructions: '🔍 Tap the words that match the highlighted one!',
+    unlockBtn: '⭐ Unlock (10 stars)',
+    islTitle: 'Febe\'s island',
+    level: ['Level 1','Level 2','Level 3'],
+    nextWordBtn: 'Next ➡',
+    readAgain: '🔄 Read again',
+    homeBtn: '🏠 Menu',
+    noTexts: 'No texts available for this level',
+    menuLetters: 'Complete the word',
+    letInstructions: '🔤 Choose the right letter!',
+    letTitle: 'Complete the word',
+  }
+};
+
+function t(key) { return T[lang][key] || key; }
+
+// ============ NAVIGATION ============
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  currentScreen = name;
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  updateUI();
+  if (name === 'reading') initReading();
+  if (name === 'syllables') initSyllables();
+  if (name === 'imgmatch') initImgMatch();
+  if (name === 'visual') initVisual();
+  if (name === 'island') renderIsland();
+  if (name === 'letters') initLetters();
+  if (name === 'admin') renderAdminLists();
+  window.scrollTo(0,0);
+}
+
+function goHome() {
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  showScreen('home');
+}
+
+// ============ LANG & LEVEL ============
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-it').classList.toggle('active', l === 'it');
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  updateUI();
+  if (currentScreen !== 'home') {
+    const s = currentScreen;
+    if (s === 'reading') initReading();
+    if (s === 'syllables') initSyllables();
+    if (s === 'imgmatch') initImgMatch();
+    if (s === 'visual') initVisual();
+  }
+}
+
+function setLevel(l) {
+  level = l;
+  // Update all level buttons for current screen
+  ['','s','i','v','l'].forEach(prefix => {
+    [0,1,2].forEach(i => {
+      const btn = document.getElementById(prefix + 'lvl' + i);
+      if (btn) btn.classList.toggle('active', i === l);
+    });
+  });
+  if (currentScreen === 'reading') initReading();
+  if (currentScreen === 'syllables') initSyllables();
+  if (currentScreen === 'imgmatch') initImgMatch();
+  if (currentScreen === 'visual') initVisual();
+}
+
+function updateUI() {
+  document.getElementById('total-stars').textContent = stars;
+  document.getElementById('home-sub').textContent = t('homeSub');
+  document.getElementById('home-stars-label').textContent = t('homeStars');
+  document.getElementById('menu-reading').textContent = t('menuReading');
+  document.getElementById('menu-syllables').textContent = t('menuSyllables');
+  document.getElementById('menu-images').textContent = t('menuImages');
+  document.getElementById('menu-visual').textContent = t('menuVisual');
+  document.getElementById('menu-island').textContent = t('menuIsland');
+  const ml = document.getElementById('menu-letters'); if (ml) ml.textContent = t('menuLetters');
+
+  // Reading
+  document.getElementById('reading-title').textContent = t('readingTitle');
+  document.getElementById('reading-lang-badge').textContent = lang.toUpperCase();
+  const rsl = document.getElementById('reading-select-label');
+  if (rsl) rsl.textContent = t('readingSelectLabel');
+  const rbl = document.getElementById('reading-back-label');
+  if (rbl) rbl.textContent = t('backLabel');
+
+  // Syllables
+  document.getElementById('syllables-title').textContent = t('syllablesTitle');
+  document.getElementById('syllables-lang-badge').textContent = lang.toUpperCase();
+  document.getElementById('syl-instructions').textContent = t('sylInstructions');
+
+  // Image
+  document.getElementById('img-title').textContent = t('imgTitle');
+  document.getElementById('img-lang-badge').textContent = lang.toUpperCase();
+  document.getElementById('img-instructions').textContent = t('imgInstructions');
+
+  // Visual
+  document.getElementById('vis-title').textContent = t('visTitle');
+  document.getElementById('vis-lang-badge').textContent = lang.toUpperCase();
+  document.getElementById('vis-instructions').textContent = t('visInstructions');
+
+  // Island
+  document.getElementById('island-stars').textContent = stars;
+  document.getElementById('unlock-btn').textContent = t('unlockBtn');
+  document.getElementById('unlock-btn').disabled = stars < 10;
+}
+
+// ============ READING EXERCISE ============
+// Pagination: split parsed syllables into pages of ~40 syllables
+const SYLS_PER_PAGE = 40;
+let pages = [];          // array of arrays of word-objects per page
+let currentPage = 0;
+let isPaused = false;
+
+function buildPages(body) {
+  const words = body.split(' ').filter(w => w.trim());
+  const parsed = words.map(w => {
+    const syls = w.split('·');
+    return { syllables: syls, original: syls.join('') };
+  });
+  // split into pages
+  const result = [];
+  let page = [];
+  let sylCount = 0;
+  parsed.forEach(word => {
+    page.push(word);
+    sylCount += word.syllables.length;
+    if (sylCount >= SYLS_PER_PAGE) {
+      // try to break at sentence boundary (word ending in . ? !)
+      const lastWord = word.original.replace(/·/g,'');
+      if (/[.!?]$/.test(lastWord) || sylCount >= SYLS_PER_PAGE + 10) {
+        result.push(page);
+        page = [];
+        sylCount = 0;
+      }
+    }
+  });
+  if (page.length) result.push(page);
+  return result;
+}
+
+function initReading() {
+  readingActive = false;
+  isPaused = false;
+  sessionErrors = 0;
+  errorPositions = [];
+  currentSylIdx = 0;
+  currentPage = 0;
+  pages = [];
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+
+  document.getElementById('reading-setup').style.display = '';
+  document.getElementById('reading-active').style.display = 'none';
+  document.getElementById('page-overlay').style.display = 'none';
+  document.getElementById('reading-score-badge').textContent = '⭐ 0';
+  document.getElementById('reading-score-active').textContent = '⭐ 0';
+  document.getElementById('reading-progress').style.width = '0%';
+
+  [0,1,2].forEach(i => {
+    const btn = document.getElementById('lvl' + i);
+    if (btn) { btn.textContent = t('level')[i]; btn.classList.toggle('active', i === level); }
+  });
+
+  const sel = document.getElementById('text-select');
+  sel.innerHTML = '';
+  const texts = DEFAULT_DATA[lang].texts.filter(tx => tx.level === level);
+  if (!texts.length) {
+    sel.innerHTML = '<option>' + t('noTexts') + '</option>';
+    return;
+  }
+  texts.forEach(tx => {
+    const opt = document.createElement('option');
+    opt.value = tx.id;
+    opt.textContent = tx.title;
+    sel.appendChild(opt);
+  });
+  loadText();
+}
+
+function loadText() {
+  const sel = document.getElementById('text-select');
+  const id = sel.value;
+  const texts = DEFAULT_DATA[lang].texts.filter(tx => tx.level === level);
+  currentTextData = texts.find(tx => tx.id === id) || texts[0];
+}
+
+function startReading() {
+  if (!currentTextData) return;
+  readingActive = true;
+  isPaused = false;
+  sessionErrors = 0;
+  errorPositions = [];
+  currentSylIdx = 0;
+  currentPage = 0;
+
+  pages = buildPages(currentTextData.body);
+
+  document.getElementById('reading-setup').style.display = 'none';
+  const activeDiv = document.getElementById('reading-active');
+  activeDiv.style.display = 'flex';
+  document.getElementById('page-overlay').style.display = 'none';
+  document.getElementById('reading-pause-btn').textContent = '⏸';
+
+  renderPage(currentPage);
+}
+
+function renderPage(pageIdx) {
+  currentSylIdx = 0;
+  syllableElements = [];
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+
+  const pageWords = pages[pageIdx];
+  const container = document.getElementById('reading-text-display');
+  container.innerHTML = '';
+
+  // Global syllable index offset for error tracking (page-local, reset per page)
+  pageWords.forEach((word, wi) => {
+    word.syllables.forEach((syl, si) => {
+      const span = document.createElement('span');
+      span.className = 'syllable pending';
+      span.textContent = syl;
+      span.dataset.globalIdx = syllableElements.length;
+      syllableElements.push(span);
+      container.appendChild(span);
+    });
+    if (wi < pageWords.length - 1) {
+      const space = document.createElement('span');
+      space.className = 'word-sep';
+      container.appendChild(space);
+    }
+  });
+
+  // Page counter
+  document.getElementById('page-counter').textContent =
+    (lang === 'it' ? 'Pagina ' : 'Page ') + (pageIdx + 1) + ' / ' + pages.length;
+
+  // Progress across all pages
+  const totalSyls = pages.reduce((s, p) => s + p.reduce((ss, w) => ss + w.syllables.length, 0), 0);
+  const doneSyls = pages.slice(0, pageIdx).reduce((s, p) => s + p.reduce((ss, w) => ss + w.syllables.length, 0), 0);
+  const globalPct = totalSyls > 0 ? Math.round((doneSyls / totalSyls) * 100) : 0;
+  document.getElementById('reading-progress').style.width = globalPct + '%';
+
+  // Reset card scroll
+  document.getElementById('reading-card').scrollTop = 0;
+
+  highlightCurrentSyllable();
+
+  // Start timer (always on — speed controls pace)
+  if (readingActive && !isPaused) startAutoTimer();
+}
+
+function highlightCurrentSyllable() {
+  syllableElements.forEach((el, i) => {
+    if (errorPositions.includes(pageKey(i))) {
+      el.className = 'syllable error';
+    } else if (i < currentSylIdx) {
+      el.className = 'syllable done';
+    } else if (i === currentSylIdx) {
+      el.className = 'syllable active';
+    } else {
+      el.className = 'syllable pending';
+    }
+  });
+
+  // Progress within page
+  const total = syllableElements.length;
+  const pct = total > 0 ? Math.round((currentSylIdx / total) * 100) : 0;
+  // (global progress bar is set at page load; we could update here too but it jumps)
+
+  // Scroll active syllable to center of card
+  const activeEl = syllableElements[currentSylIdx];
+  if (activeEl) {
+    const card = document.getElementById('reading-card');
+    const elTop = activeEl.offsetTop;
+    const elH = activeEl.offsetHeight;
+    const cardH = card.clientHeight;
+    const target = elTop - cardH / 2 + elH / 2;
+    card.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+  }
+}
+
+// Unique key per syllable across pages (page + local index)
+function pageKey(localIdx) { return currentPage + '_' + localIdx; }
+
+function startAutoTimer() {
+  if (autoTimer) clearInterval(autoTimer);
+  autoTimer = setInterval(() => {
+    if (!readingActive || isPaused) return;
+    advanceSyllable();
+  }, SPEED_MS[readingSpeed]);
+}
+
+function advanceSyllable() {
+  if (currentSylIdx < syllableElements.length - 1) {
+    currentSylIdx++;
+    highlightCurrentSyllable();
+  } else {
+    // End of page
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    setTimeout(showPageEnd, 400);
+  }
+}
+
+function showPageEnd() {
+  if (!readingActive) return;
+  const isLast = currentPage >= pages.length - 1;
+  const overlay = document.getElementById('page-overlay');
+  overlay.style.display = 'flex';
+  if (isLast) {
+    document.getElementById('overlay-emoji').textContent = '🌟';
+    document.getElementById('overlay-msg').textContent = lang === 'it' ? 'Testo completato!' : 'Text complete!';
+    document.getElementById('overlay-next-btn').textContent = lang === 'it' ? '✅ Vedi risultati' : '✅ See results';
+  } else {
+    document.getElementById('overlay-emoji').textContent = ['🎉','⭐','🌟','🦋','🌈'][currentPage % 5];
+    document.getElementById('overlay-msg').textContent = lang === 'it'
+      ? 'Pagina ' + (currentPage + 1) + ' completata!'
+      : 'Page ' + (currentPage + 1) + ' done!';
+    document.getElementById('overlay-next-btn').textContent = lang === 'it' ? 'Pagina successiva →' : 'Next page →';
+  }
+}
+
+function goNextPage() {
+  document.getElementById('page-overlay').style.display = 'none';
+  if (currentPage >= pages.length - 1) {
+    finishReading();
+    return;
+  }
+  currentPage++;
+  errorPositions = []; // reset per page (errors tracked globally in sessionErrors)
+  renderPage(currentPage);
+}
+
+function togglePause() {
+  isPaused = !isPaused;
+  document.getElementById('reading-pause-btn').textContent = isPaused ? '▶' : '⏸';
+  if (!isPaused && readingActive) {
+    startAutoTimer();
+    highlightCurrentSyllable();
+  } else {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+}
+
+function markError() {
+  if (!readingActive || isPaused) return;
+  const key = pageKey(currentSylIdx);
+  if (!errorPositions.includes(key)) {
+    errorPositions.push(key);
+    sessionErrors++;
+    if (syllableElements[currentSylIdx]) syllableElements[currentSylIdx].className = 'syllable error';
+  }
+  // advance even after error
+  advanceSyllable();
+}
+
+function finishReading() {
+  if (!readingActive) return;
+  readingActive = false;
+  isPaused = false;
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  document.getElementById('page-overlay').style.display = 'none';
+
+  const totalSyls = pages.reduce((s, p) => s + p.reduce((ss, w) => ss + w.syllables.length, 0), 0);
+  const totalWords = pages.reduce((s, p) => s + p.length, 0);
+  const errRate = totalSyls > 0 ? sessionErrors / totalSyls : 0;
+  const starsEarned = errRate === 0 ? 3 : errRate < 0.1 ? 2 : 1;
+
+  stars += starsEarned;
+  save('stars', stars);
+  updateUI();
+
+  document.getElementById('reading-score-active').textContent = '⭐ +' + starsEarned;
+  setTimeout(() => showResults(totalWords, sessionErrors, starsEarned), 500);
+}
+
+function showResults(wordCount, errors, starsEarned) {
+  const titleIdx = errors === 0 ? 0 : errors <= 3 ? 1 : 2;
+  document.getElementById('result-emoji').textContent = errors === 0 ? '🌟' : errors <= 3 ? '⭐' : '💪';
+  document.getElementById('result-title').textContent = t('resultTitle')[titleIdx];
+  document.getElementById('res-words').textContent = wordCount;
+  document.getElementById('res-words-lbl').textContent = t('resWords');
+  document.getElementById('res-errors').textContent = errors;
+  document.getElementById('res-errors-lbl').textContent = t('resErrors');
+  document.getElementById('res-stars').textContent = starsEarned;
+
+  const starsEl = document.getElementById('stars-earned');
+  starsEl.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const s = document.createElement('span');
+    s.className = 'star';
+    s.textContent = i < starsEarned ? '⭐' : '☆';
+    starsEl.appendChild(s);
+  }
+
+  // Simple review note
+  const rv = document.getElementById('review-text');
+  rv.innerHTML = '';
+  if (errors === 0) {
+    rv.textContent = lang === 'it' ? '🎯 Nessun errore! Lettura perfetta.' : '🎯 No errors! Perfect reading.';
+  } else {
+    rv.textContent = (lang === 'it' ? '📝 Errori segnati: ' : '📝 Errors marked: ') + errors;
+  }
+
+  document.getElementById('results-again-btn').textContent = t('readAgain');
+  document.getElementById('results-home-btn').textContent = t('homeBtn');
+
+  showScreen('results');
+  if (starsEarned === 3) confetti();
+}
+
+function setSpeed(s) {
+  readingSpeed = s;
+  [0,1,2,3].forEach(i => {
+    const btn = document.getElementById('spd' + i);
+    if (btn) btn.classList.toggle('active', i === s);
+  });
+  // Restart timer if already running
+  if (readingActive && !isPaused) startAutoTimer();
+}
+
+function setMode(m) {
+  readingMode = m;
+  document.getElementById('mode-parent') && document.getElementById('mode-parent').classList.toggle('active', m === 'parent');
+  document.getElementById('mode-auto') && document.getElementById('mode-auto').classList.toggle('active', m === 'auto');
+}
+
+function handleReadingBtn() {
+  if (!readingActive) startReading(); else finishReading();
+}
+
+// ============ SYLLABLES EXERCISE ============
+function initSyllables() {
+  sylScore = 0;
+  sylIdx = 0;
+  const words = DEFAULT_DATA[lang].sylWords.filter(w => w.level === level);
+  sylWords = shuffle([...words]);
+  document.getElementById('syl-score').textContent = '⭐ 0';
+  document.getElementById('syl-progress-label').textContent = '0/' + sylWords.length;
+  [0,1,2].forEach(i => {
+    const btn = document.getElementById('slvl' + i);
+    if (btn) { btn.textContent = t('level')[i]; btn.classList.toggle('active', i === level); }
+  });
+  renderSylWord();
+}
+
+function renderSylWord() {
+  if (sylIdx >= sylWords.length) {
+    showToast(lang === 'it' ? '🎉 Tutti gli esercizi completati!' : '🎉 All exercises done!');
+    setTimeout(goHome, 1500);
+    return;
+  }
+  sylCurrentWord = sylWords[sylIdx];
+  const syllables = sylCurrentWord.word.split('·');
+  sylSelectedSlots = new Array(syllables.length).fill(null);
+
+  document.getElementById('syl-image').textContent = sylCurrentWord.emoji;
+  document.getElementById('syl-hint').textContent = '';
+  document.getElementById('syl-next-btn').style.display = 'none';
+  document.getElementById('syl-progress-label').textContent = (sylIdx + 1) + '/' + sylWords.length;
+
+  // Render slots
+  const slots = document.getElementById('syl-slots');
+  slots.innerHTML = '';
+  syllables.forEach((_, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'syl-slot';
+    slot.id = 'slot-' + i;
+    slot.style.minWidth = Math.max(70, syllables[i] ? syllables[i].length * 22 : 70) + 'px';
+    slots.appendChild(slot);
+  });
+
+  // Render options (shuffled)
+  const opts = document.getElementById('syl-options');
+  opts.innerHTML = '';
+  const shuffled = shuffle([...syllables]);
+  shuffled.forEach(syl => {
+    const btn = document.createElement('button');
+    btn.className = 'syl-option';
+    btn.textContent = syl;
+    btn.onclick = () => selectSyllable(btn, syl);
+    opts.appendChild(btn);
+  });
+}
+
+function selectSyllable(btn, syl) {
+  if (btn.classList.contains('used')) return;
+  const syllables = sylCurrentWord.word.split('·');
+  // Find next empty slot
+  const nextEmpty = sylSelectedSlots.findIndex(s => s === null);
+  if (nextEmpty === -1) return;
+
+  // Check if correct
+  if (syl === syllables[nextEmpty]) {
+    sylSelectedSlots[nextEmpty] = syl;
+    btn.classList.add('used');
+    const slot = document.getElementById('slot-' + nextEmpty);
+    slot.textContent = syl;
+    slot.className = 'syl-slot correct';
+
+    // Check if word complete
+    if (sylSelectedSlots.every(s => s !== null)) {
+      sylScore += 2;
+      stars += 2;
+      save('stars', stars);
+      document.getElementById('syl-score').textContent = '⭐ ' + sylScore;
+      updateUI();
+      setTimeout(() => {
+        document.getElementById('syl-next-btn').style.display = 'block';
+        sylIdx++;
+        if (sylWords.length > sylIdx) renderSylWord();
+        else {
+          showToast(lang === 'it' ? '🎉 Bravissima Febe!' : '🎉 Amazing Febe!');
+          confetti();
+          setTimeout(goHome, 2000);
+        }
+      }, 600);
+    }
+  } else {
+    // Wrong
+    const slot = document.getElementById('slot-' + nextEmpty);
+    slot.className = 'syl-slot wrong';
+    btn.style.background = '#FFEEEE';
+    setTimeout(() => {
+      slot.className = 'syl-slot';
+      btn.style.background = '';
+    }, 500);
+    // Show hint after 2 wrong attempts
+    const wrongCount = (parseInt(sylCurrentWord.wrongCount || 0)) + 1;
+    sylCurrentWord.wrongCount = wrongCount;
+    if (wrongCount >= 2) {
+      document.getElementById('syl-hint').textContent = sylCurrentWord.word.replace(/·/g, ' · ');
+    }
+  }
+}
+
+// ============ IMAGE MATCH EXERCISE ============
+function initImgMatch() {
+  imgScore = 0;
+  imgIdx = 0;
+  const words = DEFAULT_DATA[lang].imgWords.filter(w => w.level === level);
+  imgWords = shuffle([...words]);
+  document.getElementById('img-score').textContent = '⭐ 0';
+  document.getElementById('img-progress-label').textContent = '0/' + imgWords.length;
+  [0,1,2].forEach(i => {
+    const btn = document.getElementById('ilvl' + i);
+    if (btn) { btn.textContent = t('level')[i]; btn.classList.toggle('active', i === level); }
+  });
+  renderImgWord();
+}
+
+function renderImgWord() {
+  if (imgIdx >= imgWords.length) {
+    showToast(lang === 'it' ? '🎉 Completato!' : '🎉 Completed!');
+    confetti();
+    setTimeout(goHome, 1500);
+    return;
+  }
+  document.getElementById('img-progress-label').textContent = (imgIdx + 1) + '/' + imgWords.length;
+  const current = imgWords[imgIdx];
+  document.getElementById('img-emoji').textContent = current.emoji;
+
+  // Pick 3 wrong options from same level
+  const others = imgWords.filter((_, i) => i !== imgIdx).slice(0, 3).map(w => w.word);
+  const options = shuffle([current.word, ...others]).slice(0, 4);
+
+  const container = document.getElementById('img-options');
+  container.innerHTML = '';
+  options.forEach(word => {
+    const btn = document.createElement('div');
+    btn.className = 'word-option';
+    btn.textContent = word;
+    btn.onclick = () => {
+      if (btn.classList.contains('correct-ans') || btn.classList.contains('wrong-ans')) return;
+      if (word === current.word) {
+        btn.classList.add('correct-ans');
+        imgScore += 2; stars += 2;
+        save('stars', stars);
+        document.getElementById('img-score').textContent = '⭐ ' + imgScore;
+        updateUI();
+        imgIdx++;
+        setTimeout(renderImgWord, 700);
+      } else {
+        btn.classList.add('wrong-ans');
+        setTimeout(() => btn.classList.remove('wrong-ans'), 600);
+      }
+    };
+    container.appendChild(btn);
+  });
+}
+
+// ============ VISUAL DISCRIMINATION ============
+function initVisual() {
+  visScore = 0;
+  visIdx = 0;
+  const words = DEFAULT_DATA[lang].visWords.filter(w => w.level === level);
+  visWords = shuffle([...words]);
+  document.getElementById('vis-score').textContent = '⭐ 0';
+  document.getElementById('vis-progress-label').textContent = '0/' + visWords.length;
+  [0,1,2].forEach(i => {
+    const btn = document.getElementById('vlvl' + i);
+    if (btn) { btn.textContent = t('level')[i]; btn.classList.toggle('active', i === level); }
+  });
+  renderVisWord();
+}
+
+function renderVisWord() {
+  if (visIdx >= visWords.length) {
+    showToast(lang === 'it' ? '🎉 Bravissima!' : '🎉 Brilliant!');
+    confetti();
+    setTimeout(goHome, 1500);
+    return;
+  }
+  document.getElementById('vis-progress-label').textContent = (visIdx + 1) + '/' + visWords.length;
+  const current = visWords[visIdx];
+  document.getElementById('vis-target').textContent = current.word;
+  document.getElementById('vis-next-btn').style.display = 'none';
+
+  // Build grid of words (correct ones + distractors)
+  const allWords = [...current.distractors];
+  const shuffled = shuffle(allWords).slice(0, 8);
+
+  const grid = document.getElementById('vis-grid');
+  grid.innerHTML = '';
+  let correctTouched = 0;
+  const correctCount = shuffled.filter(w => w === current.word).length;
+
+  shuffled.forEach(word => {
+    const cell = document.createElement('div');
+    cell.className = 'word-cell';
+    cell.textContent = word;
+    cell.onclick = () => {
+      if (cell.classList.contains('correct-ans') || cell.classList.contains('wrong-ans')) return;
+      if (word === current.word) {
+        cell.classList.add('correct-ans');
+        correctTouched++;
+        if (correctTouched >= correctCount) {
+          visScore += 2; stars += 2;
+          save('stars', stars);
+          document.getElementById('vis-score').textContent = '⭐ ' + visScore;
+          updateUI();
+          visIdx++;
+          if (visIdx >= visWords.length) {
+            showToast(lang === 'it' ? '🎉 Bravissima!' : '🎉 Brilliant!');
+            confetti();
+            setTimeout(() => {
+              document.getElementById('vis-next-btn').style.display = 'block';
+              document.getElementById('vis-next-btn').textContent = lang === 'it' ? '🏠 Torna al menu' : '🏠 Back to menu';
+              document.getElementById('vis-next-btn').onclick = goHome;
+            }, 400);
+          } else {
+            setTimeout(renderVisWord, 700);
+          }
+        }
+      } else {
+        cell.classList.add('wrong-ans');
+        setTimeout(() => cell.classList.remove('wrong-ans'), 500);
+      }
+    };
+    grid.appendChild(cell);
+  });
+}
+
+function nextVisWord() {
+  visIdx++;
+  renderVisWord();
+}
+
+function nextSylWord() {
+  renderSylWord();
+}
+
+// ============ ISLAND ============
+function renderIsland() {
+  document.getElementById('island-stars').textContent = stars;
+  document.getElementById('unlock-btn').disabled = stars < 10;
+  const unlocked = load('island_unlocked', 0);
+  const grid = document.getElementById('island-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'island-piece ' + (i < unlocked ? 'unlocked' : 'locked');
+    piece.textContent = i < unlocked ? ISLAND_EMOJIS[i % ISLAND_EMOJIS.length] : '🔒';
+    grid.appendChild(piece);
+  }
+}
+
+function unlockPiece() {
+  if (stars < 10) return;
+  stars -= 10;
+  save('stars', stars);
+  const unlocked = load('island_unlocked', 0);
+  save('island_unlocked', Math.min(unlocked + 1, 16));
+  updateUI();
+  renderIsland();
+  confetti();
+  showToast(lang === 'it' ? '🏝️ Nuovo pezzo sbloccato!' : '🏝️ New piece unlocked!');
+}
+
+// ============ ADMIN ============
+function saveAdminStars() {
+  const v = parseInt(document.getElementById('admin-stars-input').value) || 0;
+  stars = v;
+  save('stars', stars);
+  updateUI();
+  showToast(lang === 'it' ? '⭐ Stelle salvate!' : '⭐ Stars saved!');
+}
+
+function addText() {
+  const l = document.getElementById('admin-lang').value;
+  const lv = parseInt(document.getElementById('admin-level').value);
+  const title = document.getElementById('admin-text-title').value.trim();
+  const body = document.getElementById('admin-text-body').value.trim();
+  if (!title || !body) { showToast('Inserisci titolo e testo'); return; }
+  const key = 'custom_texts_' + l;
+  const list = load(key, []);
+  list.push({ id: 'c' + Date.now(), title, level: lv, body });
+  save(key, list);
+  DEFAULT_DATA[l].texts.push({ id: 'c' + Date.now(), title, level: lv, body });
+  document.getElementById('admin-text-title').value = '';
+  document.getElementById('admin-text-body').value = '';
+  renderAdminLists();
+  showToast('✅ Testo aggiunto!');
+}
+
+function addSylWord() {
+  const l = document.getElementById('admin-syl-lang').value;
+  const lv = parseInt(document.getElementById('admin-syl-level').value);
+  const word = document.getElementById('admin-syl-word').value.trim().toUpperCase();
+  const emoji = document.getElementById('admin-syl-emoji').value.trim();
+  if (!word) { showToast('Inserisci la parola con le sillabe (es: SO·LE)'); return; }
+  const key = 'custom_syl_' + l;
+  const list = load(key, []);
+  list.push({ word, emoji: emoji || '📝', level: lv });
+  save(key, list);
+  DEFAULT_DATA[l].sylWords.push({ word, emoji: emoji || '📝', level: lv });
+  document.getElementById('admin-syl-word').value = '';
+  document.getElementById('admin-syl-emoji').value = '';
+  showToast('✅ Parola aggiunta!');
+}
+
+function addImgWord() {
+  const l = document.getElementById('admin-img-lang').value;
+  const lv = parseInt(document.getElementById('admin-img-level').value);
+  const word = document.getElementById('admin-img-word').value.trim().toUpperCase();
+  const emoji = document.getElementById('admin-img-emoji').value.trim();
+  if (!word) { showToast('Inserisci la parola'); return; }
+  const key = 'custom_img_' + l;
+  const list = load(key, []);
+  list.push({ word, emoji: emoji || '📝', level: lv });
+  save(key, list);
+  DEFAULT_DATA[l].imgWords.push({ word, emoji: emoji || '📝', level: lv });
+  document.getElementById('admin-img-word').value = '';
+  document.getElementById('admin-img-emoji').value = '';
+  showToast('✅ Parola aggiunta!');
+}
+
+function addVisWord() {
+  const l = document.getElementById('admin-vis-lang').value;
+  const lv = parseInt(document.getElementById('admin-vis-level').value);
+  const word = document.getElementById('admin-vis-word').value.trim().toUpperCase();
+  const distractorsRaw = document.getElementById('admin-vis-distractors').value.trim().toUpperCase();
+  if (!word || !distractorsRaw) { showToast('Inserisci la parola e i distrattori'); return; }
+  const distractors = distractorsRaw.split(',').map(d => d.trim());
+  const key = 'custom_vis_' + l;
+  const list = load(key, []);
+  list.push({ word, distractors, level: lv });
+  save(key, list);
+  DEFAULT_DATA[l].visWords.push({ word, distractors, level: lv });
+  document.getElementById('admin-vis-word').value = '';
+  document.getElementById('admin-vis-distractors').value = '';
+  showToast('✅ Parola aggiunta!');
+}
+
+function renderAdminLists() {
+  document.getElementById('admin-stars-input').value = stars;
+  const list = document.getElementById('admin-texts-list');
+  list.innerHTML = '';
+  ['it','en'].forEach(l => {
+    const custom = load('custom_texts_' + l, []);
+    custom.forEach((tx, i) => {
+      const item = document.createElement('div');
+      item.className = 'admin-list-item';
+      item.innerHTML = `<span class="item-label">[${l.toUpperCase()}] ${tx.title}</span>
+        <button class="del-btn" onclick="deleteCustomText('${l}',${i})">🗑</button>`;
+      list.appendChild(item);
+    });
+  });
+  if (!list.children.length) list.innerHTML = '<div style="color:var(--text-soft);font-size:13px;padding:8px">Nessun testo personalizzato</div>';
+}
+
+function deleteCustomText(l, i) {
+  const list = load('custom_texts_' + l, []);
+  list.splice(i, 1);
+  save('custom_texts_' + l, list);
+  location.reload();
+}
+
+function resetAll() {
+  if (confirm('Sei sicuro? Verranno cancellati tutti i progressi di Febe.')) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+// ============ LETTER EXERCISE ============
+let letWords = [];
+let letIdx = 0;
+let letScore = 0;
+
+// DSA-focus: highlight misleading letters in orange-red
+const MISLEADING = {
+  it: { 'B':'🔴','D':'🔴','P':'🔴','Q':'🔴','M':'🟠','N':'🟠','C':'🟡','G':'🟡','F':'🟡','V':'🟡','S':'🟡','Z':'🟡' },
+  en: { 'B':'🔴','D':'🔴','P':'🔴','Q':'🔴','M':'🟠','N':'🟠','C':'🟡','G':'🟡','F':'🟡','V':'🟡' }
+};
+const MISLEAD_COLOR = { '🔴':'#FF3030', '🟠':'#FF7A00', '🟡':'#CC9900' };
+
+function initLetters() {
+  letScore = 0; letIdx = 0;
+  const words = (DEFAULT_DATA[lang].letterWords || []).filter(w => w.level === level);
+  letWords = shuffle([...words]);
+  document.getElementById('let-score').textContent = '⭐ 0';
+  document.getElementById('let-progress').textContent = '0/' + letWords.length;
+  document.getElementById('letters-title').textContent = t('letTitle');
+  document.getElementById('letters-lang-badge').textContent = lang.toUpperCase();
+  document.getElementById('letters-instructions').textContent = t('letInstructions');
+  [0,1,2].forEach(i => {
+    const btn = document.getElementById('llvl' + i);
+    if (btn) { btn.textContent = t('level')[i]; btn.classList.toggle('active', i === level); }
+  });
+  renderLetterWord();
+}
+
+function renderLetterWord() {
+  if (letIdx >= letWords.length) {
+    showToast(lang === 'it' ? '🎉 Bravissima Febe!' : '🎉 Well done Febe!');
+    confetti();
+    setTimeout(goHome, 1800);
+    return;
+  }
+  document.getElementById('let-next-btn').style.display = 'none';
+  document.getElementById('let-hint').textContent = '';
+  const w = letWords[letIdx];
+  document.getElementById('let-emoji').textContent = w.emoji || '📝';
+  document.getElementById('let-progress').textContent = (letIdx + 1) + '/' + letWords.length;
+
+  // Build template: array of letters, one is '?'
+  const template = w.template || [];
+  const missingIdx = w.missingIdx !== undefined ? w.missingIdx : 0;
+  const options = w.missingOptions || w.options || [];
+
+  // Render word display
+  const display = document.getElementById('let-word-display');
+  display.innerHTML = '';
+  template.forEach((ch, i) => {
+    const box = document.createElement('div');
+    box.style.cssText = 'width:52px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:Fredoka One,cursive;font-size:28px;font-weight:700;transition:all 0.2s;';
+    if (i === missingIdx) {
+      box.style.background = '#FFE8E0';
+      box.style.border = '3px dashed #FF6B4A';
+      box.style.color = '#FF6B4A';
+      box.textContent = '?';
+      box.id = 'let-blank';
+    } else {
+      box.style.background = 'var(--card)';
+      box.style.border = '2px solid var(--border)';
+      box.style.color = 'var(--text)';
+      box.textContent = ch;
+    }
+    display.appendChild(box);
+  });
+
+  // Render letter option buttons
+  const opts = document.getElementById('let-options');
+  opts.innerHTML = '';
+  const ml = MISLEADING[lang] || {};
+  shuffle([...options]).forEach(letter => {
+    const btn = document.createElement('button');
+    const risk = ml[letter];
+    const color = risk ? MISLEAD_COLOR[risk] : 'var(--text)';
+    btn.style.cssText = \`width:64px;height:64px;border-radius:16px;border:3px solid \${risk ? color : 'var(--border)'};background:var(--card);font-family:Fredoka One,cursive;font-size:30px;font-weight:700;color:\${color};cursor:pointer;transition:all 0.15s;box-shadow:var(--shadow);\`;
+    btn.textContent = letter;
+    if (risk) {
+      const dot = document.createElement('div');
+      dot.style.cssText = \`position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:\${color};\`;
+      btn.style.position = 'relative';
+      btn.appendChild(dot);
+    }
+    btn.onclick = () => checkLetter(letter, w.correct, btn, template, missingIdx);
+    opts.appendChild(btn);
+  });
+}
+
+function checkLetter(chosen, correct, btn, template, missingIdx) {
+  const blank = document.getElementById('let-blank');
+  if (chosen === correct) {
+    blank.textContent = chosen;
+    blank.style.background = 'var(--green-light)';
+    blank.style.border = '3px solid var(--green)';
+    blank.style.color = '#1a7a25';
+    btn.style.background = 'var(--green-light)';
+    btn.style.borderColor = 'var(--green)';
+    letScore += 2; stars += 2;
+    save('stars', stars);
+    document.getElementById('let-score').textContent = '⭐ ' + letScore;
+    updateUI();
+    setTimeout(() => {
+      letIdx++;
+      renderLetterWord();
+    }, 700);
+  } else {
+    blank.style.background = '#FFF0F0';
+    blank.style.borderColor = '#FF4444';
+    btn.style.background = '#FFF0F0';
+    btn.style.borderColor = '#FF4444';
+    btn.style.animation = 'shake 0.4s';
+    setTimeout(() => {
+      blank.style.background = '#FFE8E0';
+      blank.style.border = '3px dashed #FF6B4A';
+      btn.style.background = 'var(--card)';
+      btn.style.borderColor = btn._origBorder || 'var(--border)';
+      btn.style.animation = '';
+    }, 500);
+    // Show hint after wrong answer
+    const w = letWords[letIdx];
+    document.getElementById('let-hint').textContent = '💡 ' + (w.word || template.join(''));
+  }
+}
+
+function nextLetterWord() {
+  letIdx++;
+  renderLetterWord();
+}
+
+// ============ UTILS ============
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function confetti() {
+  const colors = ['#FF6B9D','#FFD93D','#6BCB77','#4D96FF','#A78BFA','#FF8C42'];
+  for (let i = 0; i < 40; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      top: -10px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      animation-delay: ${Math.random() * 0.6}s;
+      animation-duration: ${1 + Math.random() * 1}s;
+      transform: rotate(${Math.random() * 360}deg);
+      width: ${6 + Math.random() * 10}px;
+      height: ${6 + Math.random() * 10}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2000);
+  }
+}
+
+// ============ INIT ============
+loadAll();
+updateUI();
+
+// Service worker for PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
