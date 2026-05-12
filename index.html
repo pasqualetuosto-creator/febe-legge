@@ -214,7 +214,7 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
 </div>
 
 <!-- READING -->
-<div id="reading" class="screen" style="background:#FFF8FC;position:relative">
+<div id="reading" class="screen" style="background:#FFFBEA;position:relative">
   <div class="page-header">
     <button class="back-btn" onclick="goHome()">&#8592;</button>
     <span class="page-title" id="reading-title">Lettura</span>
@@ -265,7 +265,11 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
 </div>
 
 <!-- RESULTS -->
-<div id="results" class="screen">
+<div id="results" class="screen" style="background:#FDF0F5;position:relative">
+  <div style="display:flex;align-items:center;gap:10px;width:100%;max-width:360px;padding:8px 0 4px">
+    <button class="back-btn" onclick="showScreen('reading')">&#8592;</button>
+    <button class="btn-secondary" onclick="goHome()" style="flex:1;padding:10px">&#127968; Menu</button>
+  </div>
   <div class="result-emoji" id="res-emoji">&#127775;</div>
   <div class="result-title" id="res-title">Bravissima!</div>
   <div class="stars-earned" id="res-stars-display"></div>
@@ -282,7 +286,7 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
 </div>
 
 <!-- SYLLABLES -->
-<div id="syllables" class="screen" style="background:#FFFBF0">
+<div id="syllables" class="screen" style="background:#F0FBF2">
   <div class="page-header">
     <button class="back-btn" onclick="goHome()">&#8592;</button>
     <span class="page-title" id="syl-title">Sillabe</span>
@@ -305,7 +309,7 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
 </div>
 
 <!-- IMAGE MATCH -->
-<div id="imgmatch" class="screen" style="background:#F0FFF4">
+<div id="imgmatch" class="screen" style="background:#EAF9EE">
   <div class="page-header">
     <button class="back-btn" onclick="goHome()">&#8592;</button>
     <span class="page-title" id="img-title">Immagine</span>
@@ -325,7 +329,7 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
 </div>
 
 <!-- VISUAL -->
-<div id="visual" class="screen" style="background:#F0F4FF">
+<div id="visual" class="screen" style="background:#EBF1FF">
   <div class="page-header">
     <button class="back-btn" onclick="goHome()">&#8592;</button>
     <span class="page-title" id="vis-title">Trova la parola</span>
@@ -346,7 +350,7 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
 </div>
 
 <!-- LETTERS -->
-<div id="letters" class="screen" style="background:#FFF5F0">
+<div id="letters" class="screen" style="background:#FFF0F0">
   <div class="page-header">
     <button class="back-btn" onclick="goHome()">&#8592;</button>
     <span class="page-title" style="color:#FF6B4A" id="let-title">Completa la parola</span>
@@ -376,42 +380,42 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
   </div>
   <div class="island-grid" id="island-grid"></div>
   <button class="unlock-btn" id="unlock-btn" onclick="unlockPiece()">&#11088; Sblocca (10 stelle)</button>
-  <div style="padding:0 20px 24px"><button class="btn-secondary" onclick="goHome()">&#127968; Menu</button></div>
+  <div style="padding:0 20px 24px;display:flex;gap:10px"><button class="back-btn" onclick="goHome()">&#8592;</button><button class="btn-secondary" onclick="goHome()" style="flex:1">&#127968; Menu</button></div>
 </div>
 
 <!-- ADMIN -->
-<div id="admin" class="screen" style="background:#F8F8FC">
+<div id="admin" class="screen" style="background:#FDF0F5">
   <div class="page-header">
     <button class="back-btn" onclick="goHome()">&#8592;</button>
-    <span class="page-title">Impostazioni</span>
+    <span class="page-title" id="admin-title">Impostazioni</span>
   </div>
   <div class="admin-content">
     <div class="admin-section">
-      <h3>&#11088; Stelle di Febe</h3>
-      <label>Stelle totali</label>
+      <h3 id="admin-h-stars">&#11088; Stelle di Febe</h3>
+      <label id="admin-l-stars">Stelle totali</label>
       <input type="number" id="admin-stars" min="0" value="0">
-      <button class="admin-add-btn" onclick="saveAdminStars()">Salva stelle</button>
+      <button class="admin-add-btn" id="admin-btn-stars" onclick="saveAdminStars()">Salva stelle</button>
     </div>
     <div class="admin-section">
-      <h3>&#128218; Aggiungi testo di lettura</h3>
-      <label>Lingua</label>
+      <h3 id="admin-h-add">&#128218; Aggiungi testo di lettura</h3>
+      <label id="admin-l-lang">Lingua</label>
       <select id="a-text-lang"><option value="it">Italiano</option><option value="en">English</option></select>
-      <label>Livello</label>
+      <label id="admin-l-level">Livello</label>
       <select id="a-text-level"><option value="0">Livello 1</option><option value="1">Livello 2</option><option value="2">Livello 3</option></select>
-      <label>Titolo</label>
+      <label id="admin-l-title">Titolo</label>
       <input type="text" id="a-text-title" placeholder="es. Il gatto e il topo">
-      <label>Testo (sillabe separate da middot)</label>
+      <label id="admin-l-body">Testo (sillabe separate da middot)</label>
       <div class="hint">es: MA&#183;MA la gat&#183;ta man&#183;gia il for&#183;mag&#183;gio</div>
       <textarea id="a-text-body" placeholder="MA&#183;MA la gat&#183;ta man&#183;gia..."></textarea>
-      <button class="admin-add-btn" onclick="addCustomText()">+ Aggiungi testo</button>
+      <button class="admin-add-btn" id="admin-btn-add" onclick="addCustomText()">+ Aggiungi testo</button>
     </div>
     <div class="admin-section">
-      <h3>Testi personalizzati</h3>
+      <h3 id="admin-h-custom">Testi personalizzati</h3>
       <div id="admin-texts-list"><div style="color:var(--soft);font-size:13px">Nessun testo personalizzato</div></div>
     </div>
     <div class="admin-section">
-      <h3>Reset</h3>
-      <button onclick="if(confirm('Cancellare tutti i progressi?')){localStorage.clear();location.reload()}" style="background:#FFF0F0;color:#CC0000;border:2px solid #FFB0B0;border-radius:50px;padding:12px;font-family:Nunito,sans-serif;font-weight:800;font-size:14px;cursor:pointer;width:100%">Cancella progressi</button>
+      <h3 id="admin-h-reset">Reset</h3>
+      <button id="admin-btn-reset" onclick="if(confirm(lang==='it'?'Cancellare tutti i progressi?':'Delete all progress?')){localStorage.clear();location.reload()}" style="background:#FFF0F0;color:#CC0000;border:2px solid #FFB0B0;border-radius:50px;padding:12px;font-family:Nunito,sans-serif;font-weight:800;font-size:14px;cursor:pointer;width:100%" id="admin-txt-reset">Cancella progressi</button>
     </div>
   </div>
 </div>
@@ -1989,7 +1993,7 @@ function showScreen(name){
   else if(name==="visual")initVisual();
   else if(name==="letters")initLetters();
   else if(name==="island")renderIsland();
-  else if(name==="admin")renderAdmin();
+  else if(name==="admin"){renderAdmin();updateAdminUI();}
 }
 
 function goHome(){
@@ -2509,7 +2513,31 @@ function addCustomText(){
   showToast("\u2705 Testo aggiunto!");
 }
 
+function updateAdminUI(){
+  var isIT=lang==="it";
+  var el=function(id){return document.getElementById(id)};
+  if(el("admin-title"))el("admin-title").textContent=isIT?"Impostazioni":"Settings";
+  if(el("admin-h-stars"))el("admin-h-stars").innerHTML=(isIT?"&#11088; Stelle di Febe":"&#11088; Stars");
+  if(el("admin-l-stars"))el("admin-l-stars").textContent=isIT?"Stelle totali":"Total stars";
+  if(el("admin-btn-stars"))el("admin-btn-stars").textContent=isIT?"Salva stelle":"Save stars";
+  if(el("admin-h-add"))el("admin-h-add").innerHTML=(isIT?"&#128218; Aggiungi testo di lettura":"&#128218; Add reading text");
+  if(el("admin-l-lang"))el("admin-l-lang").textContent=isIT?"Lingua":"Language";
+  if(el("admin-l-level"))el("admin-l-level").textContent=isIT?"Livello":"Level";
+  if(el("admin-l-title"))el("admin-l-title").textContent=isIT?"Titolo":"Title";
+  if(el("admin-l-body"))el("admin-l-body").textContent=isIT?"Testo (sillabe separate da \u00b7)":"Text (syllables separated by \u00b7)";
+  if(el("admin-btn-add"))el("admin-btn-add").textContent=isIT?"+ Aggiungi testo":"+ Add text";
+  if(el("admin-h-custom"))el("admin-h-custom").textContent=isIT?"Testi personalizzati":"Custom texts";
+  if(el("admin-h-reset"))el("admin-h-reset").textContent="Reset";
+  if(el("admin-txt-reset"))el("admin-txt-reset").textContent=isIT?"Cancella progressi":"Delete progress";
+  var hint=document.querySelector(".hint");
+  if(hint)hint.textContent=isIT?"es: MA\u00b7MA la gat\u00b7ta":"e.g. CAT, DOG, FISH";
+  var tp=document.getElementById("a-text-title");
+  if(tp)tp.placeholder=isIT?"es. Il gatto e il topo":"e.g. The cat and the mouse";
+  var sel=document.getElementById("a-text-level");
+  if(sel){var lvls=isIT?["Livello 1","Livello 2","Livello 3"]:["Level 1","Level 2","Level 3"];for(var i=0;i<sel.options.length;i++)sel.options[i].text=lvls[i];}
+}
 function renderAdmin(){
+  updateAdminUI();
   document.getElementById("admin-stars").value=stars;
   var list=document.getElementById("admin-texts-list");
   list.innerHTML="";
