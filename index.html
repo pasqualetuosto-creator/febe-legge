@@ -208,7 +208,7 @@ body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);min-
       <span class="icon">&#127965;</span><span class="label" style="color:var(--purple-d)" id="menu-island">La mia isola</span>
     </div>
     <div class="menu-card full" onclick="showScreen('admin')">
-      <span class="icon">&#9881;</span><span class="label">Impostazioni</span>
+      <span class="icon">&#9881;</span><span class="label" id="menu-admin">Impostazioni</span>
     </div>
   </div>
 </div>
@@ -1936,7 +1936,7 @@ const T={
   it:{homeSub:"Ciao Febe! Cosa facciamo oggi?",homeStars:"stelle",
     menuReading:"Leggi ad alta voce",menuSyllables:"Completa le sillabe",
     menuImages:"Immagine & parola",menuVisual:"Trova la parola",
-    menuLetters:"Completa la parola",menuIsland:"La mia isola",
+    menuLetters:"Completa la parola",menuIsland:"La mia isola",menuAdmin:"Impostazioni",
     readingTitle:"Lettura",selectLabel:"Scegli un testo:",
     backLabel:"Torna al menu",startBtn:"Inizia",
     sylTitle:"Sillabe",sylInstr:"Tocca le sillabe nell'ordine giusto!",
@@ -1956,7 +1956,7 @@ const T={
   en:{homeSub:"Hi Febe! What shall we do today?",homeStars:"stars",
     menuReading:"Read aloud",menuSyllables:"Complete syllables",
     menuImages:"Image & word",menuVisual:"Find the word",
-    menuLetters:"Complete the word",menuIsland:"My island",
+    menuLetters:"Complete the word",menuIsland:"My island",menuAdmin:"Settings",
     readingTitle:"Reading",selectLabel:"Choose a text:",
     backLabel:"Back to menu",startBtn:"Start",
     sylTitle:"Syllables",sylInstr:"Tap syllables in the right order!",
@@ -2040,6 +2040,7 @@ function updateHomeUI(){
   document.getElementById("menu-visual").textContent=t("menuVisual");
   document.getElementById("menu-letters").textContent=t("menuLetters");
   document.getElementById("menu-island").textContent=t("menuIsland");
+  var ma=document.getElementById("menu-admin");if(ma)ma.textContent=t("menuAdmin");
 }
 
 function addStars(n){stars+=n;save("stars",stars);updateHomeUI()}
